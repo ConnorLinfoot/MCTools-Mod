@@ -101,10 +101,15 @@ public class Hypixel {
 				if( scoreObjective != null ) {
 					if( scoreObjective.getDisplayName() != null ) {
 						String gameModeString = TextFormatting.getTextWithoutFormattingCodes(scoreObjective.getDisplayName());
+						GameMode oldGamemode = gameMode;
 						gameMode = GameMode.UNKNOWN;
 						try{
 							gameMode = GameMode.valueOf(gameModeString.toUpperCase().replaceAll(" ", "_").replaceAll("-", "_"));
 						} catch(Exception ignored) {}
+
+						if(!oldGamemode.equals(gameMode)) {
+							PlayerRender.aboveHeadCache.clear(); // Clear above head as game mode has changed!
+						}
 
 					}
 				}
@@ -114,7 +119,7 @@ public class Hypixel {
 			MCTools.getMcTools().outputDebug("You are currently playing: " + gameMode.toString());
 
 			if (subServer.contains("lobby") && false) {
-				MCTools.getMcTools().outputDebug("Not doing SW kills because you are in a lobby");
+				MCTools.getMcTools().outputDebug("Not doing above heads because you are in a lobby");
 				return;
 			}
 
@@ -135,17 +140,17 @@ public class Hypixel {
 				final UUID uuid = entityPlayer.getUniqueID();
 				if (playerDataCache.containsKey(uuid)) {
 					try {
-						if (playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject("SkyWars").get("kills") == null)
+						if (playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills") == null)
 							continue;
-						double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject("SkyWars").get("kills").getAsInt();
-						double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject("SkyWars").get("deaths").getAsInt();
+						double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
+						double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
 						PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
 					} catch (NullPointerException e) {
-						MCTools.getMcTools().outputDebug("Getting SkyWars kills for: " + uuid.toString());
+						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString());
 						updateSWKills(uuid);
 					}
 				} else {
-					MCTools.getMcTools().outputDebug("Getting SkyWars kills for: " + uuid.toString());
+					MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString());
 					updateSWKills(uuid);
 				}
 			}
@@ -154,7 +159,7 @@ public class Hypixel {
 
 	public void updateSWKills(final UUID uuid) {
 		if (swKillsUpdates >= 60) {
-			waitUntil = System.currentTimeMillis() + 15 * 1000;
+			waitUntil = System.currentTimeMillis() + 30 * 1000;
 			return;
 		}
 		swKillsUpdates++;
@@ -166,11 +171,11 @@ public class Hypixel {
 					return;
 				}
 				if (!result.isSuccess()) {
-					System.out.println("ERROR: " + result.getCause());
+//					System.out.println("ERROR: " + result.getCause());
 				}
 				playerDataCache.put(uuid, result);
-				double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject("SkyWars").get("kills").getAsInt();
-				double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject("SkyWars").get("deaths").getAsInt();
+				double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
+				double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
 				PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
 //				swKillsCache.put(uuid, result.getPlayer().getAsJsonObject("stats").getAsJsonObject("SkyWars").get("kills").getAsInt());
 			}
