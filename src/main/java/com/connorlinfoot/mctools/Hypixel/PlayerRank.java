@@ -45,11 +45,11 @@ public enum PlayerRank {
 			case VIP:
 				return TextFormatting.GREEN + "[VIP] " + (includeReset ? TextFormatting.RESET : "");
 			case VIP_PLUS:
-				return TextFormatting.GREEN + "[VIP+] " + (includeReset ? TextFormatting.RESET : "");
+				return TextFormatting.GREEN + "[VIP" + TextFormatting.GOLD + "+" + TextFormatting.GREEN + "] " + (includeReset ? TextFormatting.RESET : "");
 			case MVP:
 				return TextFormatting.AQUA + "[MVP] " + (includeReset ? TextFormatting.RESET : "");
 			case MVP_PLUS:
-				return TextFormatting.AQUA + "[MVP+] " + (includeReset ? TextFormatting.RESET : "");
+				return TextFormatting.AQUA + "[MVP" + TextFormatting.RED + "+" + TextFormatting.AQUA + "] " + (includeReset ? TextFormatting.RESET : "");
 			case YOUTUBE:
 				return TextFormatting.GOLD + "[YT] " + (includeReset ? TextFormatting.RESET : "");
 			case HELPER:
