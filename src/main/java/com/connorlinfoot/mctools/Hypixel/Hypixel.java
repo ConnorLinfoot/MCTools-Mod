@@ -27,6 +27,7 @@ public class Hypixel {
 	private String subServer = "";
 	private GameMode gameMode = GameMode.UNKNOWN;
 	private boolean waitingForWhereAmI = false;
+	private ArrayList<UUID> ignore = new ArrayList<UUID>(); // This is where we store UUID's that should not be looked up, these are usually NPC's
 	private ArrayList<UUID> pending = new ArrayList<UUID>();
 	private Map<UUID, PlayerReply> playerDataCache = new HashMap<UUID, PlayerReply>();
 	//	private Map<UUID, Integer> swKillsCache = new HashMap<UUID, Integer>();
@@ -141,6 +142,8 @@ public class Hypixel {
 			MCTools.getMcTools().outputDebug("Player Cache Size: " + playerDataCache.size());
 			for (EntityPlayer entityPlayer : mc.theWorld.playerEntities) {
 				final UUID uuid = entityPlayer.getUniqueID();
+				if (ignore.contains(uuid))
+					continue;
 				if (playerDataCache.containsKey(uuid)) {
 					try {
 						if (playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills") == null)
@@ -149,11 +152,11 @@ public class Hypixel {
 						double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
 						PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
 					} catch (NullPointerException e) {
-						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getCustomNameTag() + ")");
+						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getName() + ")");
 						updateSWKills(uuid);
 					}
 				} else {
-					MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getCustomNameTag() + ")");
+					MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getName() + ")");
 					updateSWKills(uuid);
 				}
 			}
@@ -165,7 +168,7 @@ public class Hypixel {
 			waitUntil = System.currentTimeMillis() + 30 * 1000;
 			return;
 		}
-		if (pending.contains(uuid))
+		if (pending.contains(uuid) || ignore.contains(uuid))
 			return;
 		pending.add(uuid);
 		swKillsUpdates++;
@@ -179,6 +182,11 @@ public class Hypixel {
 				}
 				if (!result.isSuccess()) {
 //					System.out.println("ERROR: " + result.getCause());
+				}
+				if (result.getPlayer() == null && result.getCause() == null && result.isSuccess()) {
+					// We assume it's because the UUID belongs to an NPC
+					ignore.add(uuid);
+					return;
 				}
 				playerDataCache.put(uuid, result);
 				double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
