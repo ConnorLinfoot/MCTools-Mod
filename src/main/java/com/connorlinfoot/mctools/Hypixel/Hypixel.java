@@ -100,16 +100,17 @@ public class Hypixel {
 				// Use scoreboard to try and work out the gamemode
 				Scoreboard scoreboard = mc.thePlayer.getWorldScoreboard();
 				ScoreObjective scoreObjective = scoreboard.getObjectiveInDisplaySlot(1);
-				if( scoreObjective != null ) {
-					if( scoreObjective.getDisplayName() != null ) {
+				if (scoreObjective != null) {
+					if (scoreObjective.getDisplayName() != null) {
 						String gameModeString = TextFormatting.getTextWithoutFormattingCodes(scoreObjective.getDisplayName());
 						GameMode oldGamemode = gameMode;
 						gameMode = GameMode.UNKNOWN;
-						try{
+						try {
 							gameMode = GameMode.valueOf(gameModeString.toUpperCase().replaceAll(" ", "_").replaceAll("-", "_"));
-						} catch(Exception ignored) {}
+						} catch (Exception ignored) {
+						}
 
-						if(!oldGamemode.equals(gameMode)) {
+						if (!oldGamemode.equals(gameMode)) {
 							PlayerRender.aboveHeadCache.clear(); // Clear above head as game mode has changed!
 						}
 
@@ -151,7 +152,7 @@ public class Hypixel {
 						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getCustomNameTag() + ")");
 						updateSWKills(uuid);
 					}
-				} else if( !pending.contains(uuid)) {
+				} else {
 					MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getCustomNameTag() + ")");
 					updateSWKills(uuid);
 				}
@@ -164,6 +165,8 @@ public class Hypixel {
 			waitUntil = System.currentTimeMillis() + 30 * 1000;
 			return;
 		}
+		if (pending.contains(uuid))
+			return;
 		pending.add(uuid);
 		swKillsUpdates++;
 		HypixelAPI.getInstance().getPlayer(null, uuid, new Callback<PlayerReply>(PlayerReply.class) {
