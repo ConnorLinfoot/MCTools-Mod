@@ -32,12 +32,12 @@ public class StatsGui extends GuiScreen {
 		} else {
 			drawCenteredString(this.fontRendererObj, "Hypixel Player Stats (" + hypixel.getGameMode().getNiceName() + ")", this.width / 2, 20, 0xFFFFFF);
 
-			if (!hypixel.getPlayerDataCache().containsKey(playerUuid)) {
+			if (!hypixel.getHypixelPlayers().containsKey(playerUuid)) {
 				hypixel.updatePlayerData(playerUuid);
 				drawCenteredString(this.fontRendererObj, "Loading Player Stats...", this.width / 2, this.height / 2, 0xFFFFFF);
 			} else {
 
-				PlayerReply playerData = hypixel.getPlayerDataCache().get(playerUuid);
+				PlayerReply playerData = hypixel.getHypixelPlayers().get(playerUuid).getPlayerReply();
 //				System.out.println(playerData.getPlayer().getAsJsonObject("stats").getAsJsonObject(hypixel.getGameMode().getAPIName()));
 
 				HashMap<String, String> dataToDisplay = new HashMap<>();

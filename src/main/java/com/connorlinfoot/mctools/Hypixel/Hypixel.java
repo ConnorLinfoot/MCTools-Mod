@@ -31,7 +31,7 @@ public class Hypixel {
 	private boolean waitingForWhereAmI = false;
 	private ArrayList<UUID> ignore = new ArrayList<UUID>(); // This is where we store UUID's that should not be looked up, these are usually NPC's
 	private ArrayList<UUID> pending = new ArrayList<UUID>();
-	private Map<UUID, PlayerReply> playerDataCache = new HashMap<UUID, PlayerReply>();
+	private Map<UUID, HypixelPlayer> hypixelPlayers = new HashMap<UUID, HypixelPlayer>();
 	//	private Map<UUID, Integer> swKillsCache = new HashMap<UUID, Integer>();
 	private int swKillsUpdates = 0;
 	private long waitUntil = System.currentTimeMillis();
@@ -143,17 +143,17 @@ public class Hypixel {
 				return;
 			}
 
-			MCTools.getMcTools().outputDebug("Player Cache Size: " + playerDataCache.size());
+			MCTools.getMcTools().outputDebug("Player Cache Size: " + hypixelPlayers.size());
 			for (EntityPlayer entityPlayer : mc.theWorld.playerEntities) {
 				final UUID uuid = entityPlayer.getUniqueID();
 				if (ignore.contains(uuid))
 					continue;
-				if (playerDataCache.containsKey(uuid)) {
+				if (hypixelPlayers.containsKey(uuid)) {
 					try {
-						if (playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills") == null)
+						if (hypixelPlayers.get(uuid).getPlayerReply().getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills") == null)
 							continue;
-						double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
-						double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
+						double kills = hypixelPlayers.get(uuid).getPlayerReply().getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
+						double deaths = hypixelPlayers.get(uuid).getPlayerReply().getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
 						PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
 					} catch (NullPointerException e) {
 						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getName() + ")");
@@ -193,10 +193,10 @@ public class Hypixel {
 					ignore.add(uuid);
 					return;
 				}
-				new HypixelPlayer(uuid, result);
-				playerDataCache.put(uuid, result);
-				double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
-				double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
+				HypixelPlayer hypixelPlayer = new HypixelPlayer(uuid, result);
+				hypixelPlayers.put(uuid, hypixelPlayer);
+				double kills = hypixelPlayers.get(uuid).getPlayerReply().getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
+				double deaths = hypixelPlayers.get(uuid).getPlayerReply().getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
 				PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
 			}
 		});
@@ -225,8 +225,8 @@ public class Hypixel {
 		return (double) tmp / factor;
 	}
 
-	public Map<UUID, PlayerReply> getPlayerDataCache() {
-		return playerDataCache;
+	public Map<UUID, HypixelPlayer> getHypixelPlayers() {
+		return hypixelPlayers;
 	}
 
 	public GameMode getGameMode() {
