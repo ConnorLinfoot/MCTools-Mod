@@ -37,7 +37,8 @@ public class StatsGui extends GuiScreen {
 				drawCenteredString(this.fontRendererObj, "Loading Player Stats...", this.width / 2, this.height / 2, 0xFFFFFF);
 			} else {
 
-				PlayerReply playerData = hypixel.getHypixelPlayers().get(playerUuid).getPlayerReply();
+				HypixelPlayer hypixelPlayer = hypixel.getHypixelPlayers().get(playerUuid);
+				PlayerReply playerData = hypixelPlayer.getPlayerReply();
 //				System.out.println(playerData.getPlayer().getAsJsonObject("stats").getAsJsonObject(hypixel.getGameMode().getAPIName()));
 
 				HashMap<String, String> dataToDisplay = new HashMap<>();
@@ -62,6 +63,11 @@ public class StatsGui extends GuiScreen {
 
 				int height = 50;
 				boolean displayAll = false;
+
+				drawCenteredString(this.fontRendererObj, "Name: " + hypixelPlayer.getPlayerReply().getPlayer().get("displayname").getAsString(), this.width / 2, height, 0xFFFFFF);
+				height = height + 12;
+				drawCenteredString(this.fontRendererObj, "Rank: " + hypixelPlayer.getPlayerRank().getNiceName(), this.width / 2, height, 0xFFFFFF);
+				height = height + 24;
 
 				for (Map.Entry<String, String> data : dataToDisplay.entrySet()) {
 					if (displayAll) {
