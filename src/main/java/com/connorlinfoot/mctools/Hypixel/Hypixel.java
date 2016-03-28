@@ -87,7 +87,7 @@ public class Hypixel {
 		Minecraft mc = Minecraft.getMinecraft();
 		if (!mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null) {
 			// Find if the player is in a lobby or not
-			if (lastServerChecks + 10 * 1000 < System.currentTimeMillis()) {
+			if (lastServerChecks + 5 * 1000 < System.currentTimeMillis()) {
 				subServer = "";
 				lastServerChecks = System.currentTimeMillis();
 			}
@@ -120,7 +120,7 @@ public class Hypixel {
 				return;
 			}
 
-			MCTools.getMcTools().outputDebug("You are currently playing: " + gameMode.toString());
+			MCTools.getMcTools().outputDebug("You are currently playing: " + gameMode.getNiceName());
 
 			if (subServer.contains("lobby") && false) {
 				MCTools.getMcTools().outputDebug("Not doing above heads because you are in a lobby");
