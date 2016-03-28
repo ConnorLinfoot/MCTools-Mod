@@ -185,13 +185,15 @@ public class Hypixel {
 					return;
 				}
 				if (!result.isSuccess()) {
-//					System.out.println("ERROR: " + result.getCause());
+					System.out.println("ERROR: " + result.getCause());
+					return;
 				}
 				if (result.getPlayer() == null && result.getCause() == null && result.isSuccess()) {
 					// We assume it's because the UUID belongs to an NPC
 					ignore.add(uuid);
 					return;
 				}
+				new HypixelPlayer(uuid, result);
 				playerDataCache.put(uuid, result);
 				double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
 				double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
