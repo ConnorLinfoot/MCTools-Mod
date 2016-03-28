@@ -85,10 +85,6 @@ public class Hypixel {
 		}
 
 		if (username != null && chatMessage != null) {
-			// We know this is a chat message! :D
-//			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("Message From: " + username));
-//			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(chatMessage));
-
 			// Let's develop our own chat message! :D
 			ITextComponent finalComponent = new TextComponentString("");
 			PlayerRank playerRank = PlayerRank.DEFAULT;
@@ -106,10 +102,6 @@ public class Hypixel {
 			ITextComponent messageComponent = new TextComponentString(chatMessage);
 			finalComponent.appendSibling(messageComponent);
 
-//			ITextComponent iTextComponent = new TextComponentString("This is a test!");
-//			UUID uuid = Minecraft.getMinecraft().thePlayer.getUniqueID(); // Our UUID for now!
-//			iTextComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
-//			Minecraft.getMinecraft().thePlayer.addChatMessage(finalComponent);
 			event.setMessage(finalComponent);
 		}
 
