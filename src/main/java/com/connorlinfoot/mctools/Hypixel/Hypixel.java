@@ -6,11 +6,13 @@ import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.reply.PlayerReply;
 import net.hypixel.api.util.Callback;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -40,7 +42,7 @@ public class Hypixel {
 
 	@SubscribeEvent
 	public void onServerConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		if( FMLClientHandler.instance().getClient().getCurrentServerData() == null )
+		if (FMLClientHandler.instance().getClient().getCurrentServerData() == null)
 			return;
 		String ip = FMLClientHandler.instance().getClient().getCurrentServerData().serverIP;
 		MCTools.getMcTools().outputDebug("Connecting to: " + ip);
@@ -124,8 +126,8 @@ public class Hypixel {
 
 			MCTools.getMcTools().outputDebug("You are currently playing: " + gameMode.getNiceName());
 
-			if (subServer.contains("lobby") && false) {
-				MCTools.getMcTools().outputDebug("Not doing above heads because you are in a lobby");
+			if (subServer.contains("lobby")) {
+				MCTools.getMcTools().outputDebug("Not loading data because you are in a lobby");
 				return;
 			}
 
@@ -155,17 +157,17 @@ public class Hypixel {
 						PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
 					} catch (NullPointerException e) {
 						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getName() + ")");
-						updateSWKills(uuid);
+						updatePlayerData(uuid);
 					}
 				} else {
 					MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getName() + ")");
-					updateSWKills(uuid);
+					updatePlayerData(uuid);
 				}
 			}
 		}
 	}
 
-	public void updateSWKills(final UUID uuid) {
+	public void updatePlayerData(final UUID uuid) {
 		if (swKillsUpdates >= 60) {
 			waitUntil = System.currentTimeMillis() + 30 * 1000;
 			return;
@@ -198,6 +200,20 @@ public class Hypixel {
 		});
 	}
 
+	@SubscribeEvent
+	public void onInteract(EntityInteractEvent event) {
+		if (!shouldBeRunning)
+			return;
+		if (event.getTarget() instanceof EntityPlayer && event.getEntityPlayer().isSneaking()) {
+			EntityPlayer attacked = (EntityPlayer) event.getTarget();
+//			FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("/party invite " + attacked.getName());
+			GuiHandler.playerClicked = attacked.getUniqueID();
+			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+			entityPlayer.openGui(MCTools.getMcTools(), GuiHandler.MOD_TILE_ENTITY_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
+		}
+
+	}
+
 	public double round(double value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 
@@ -205,6 +221,14 @@ public class Hypixel {
 		value = value * factor;
 		long tmp = Math.round(value);
 		return (double) tmp / factor;
+	}
+
+	public Map<UUID, PlayerReply> getPlayerDataCache() {
+		return playerDataCache;
+	}
+
+	public GameMode getGameMode() {
+		return gameMode;
 	}
 
 }
