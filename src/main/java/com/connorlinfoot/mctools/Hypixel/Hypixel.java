@@ -40,6 +40,8 @@ public class Hypixel {
 
 	@SubscribeEvent
 	public void onServerConnect(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+		if( FMLClientHandler.instance().getClient().getCurrentServerData() == null )
+			return;
 		String ip = FMLClientHandler.instance().getClient().getCurrentServerData().serverIP;
 		MCTools.getMcTools().outputDebug("Connecting to: " + ip);
 		if (ip.toLowerCase().contains("hypixel.net"))
