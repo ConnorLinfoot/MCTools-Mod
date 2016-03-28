@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public class Hypixel {
 	private String subServer = "";
 	private GameMode gameMode = GameMode.UNKNOWN;
 	private boolean waitingForWhereAmI = false;
+	private ArrayList<UUID> pending = new ArrayList<UUID>();
 	private Map<UUID, PlayerReply> playerDataCache = new HashMap<UUID, PlayerReply>();
 	//	private Map<UUID, Integer> swKillsCache = new HashMap<UUID, Integer>();
 	private int swKillsUpdates = 0;
@@ -146,11 +148,11 @@ public class Hypixel {
 						double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
 						PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
 					} catch (NullPointerException e) {
-						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString());
+						MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getCustomNameTag() + ")");
 						updateSWKills(uuid);
 					}
-				} else {
-					MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString());
+				} else if( !pending.contains(uuid)) {
+					MCTools.getMcTools().outputDebug("Getting player data for: " + uuid.toString() + " (" + entityPlayer.getCustomNameTag() + ")");
 					updateSWKills(uuid);
 				}
 			}
@@ -162,10 +164,12 @@ public class Hypixel {
 			waitUntil = System.currentTimeMillis() + 30 * 1000;
 			return;
 		}
+		pending.add(uuid);
 		swKillsUpdates++;
 		HypixelAPI.getInstance().getPlayer(null, uuid, new Callback<PlayerReply>(PlayerReply.class) {
 			@Override
 			public void callback(Throwable failCause, PlayerReply result) {
+				pending.remove(uuid);
 				if (failCause != null) {
 					failCause.printStackTrace();
 					return;
@@ -177,7 +181,6 @@ public class Hypixel {
 				double kills = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("kills").getAsInt();
 				double deaths = playerDataCache.get(uuid).getPlayer().getAsJsonObject("stats").getAsJsonObject(gameMode.getAPIName()).get("deaths").getAsInt();
 				PlayerRender.aboveHeadCache.put(uuid, "" + TextFormatting.AQUA + round(kills / deaths, 2) + " K/D");
-//				swKillsCache.put(uuid, result.getPlayer().getAsJsonObject("stats").getAsJsonObject("SkyWars").get("kills").getAsInt());
 			}
 		});
 	}
