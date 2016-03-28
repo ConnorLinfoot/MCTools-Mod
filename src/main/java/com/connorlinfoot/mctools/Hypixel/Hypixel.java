@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class Hypixel {
-	private boolean shouldBeRunning = false;
+	private boolean currentlyOnHypixel = false;
 	private String subServer = "";
 	private GameMode gameMode = GameMode.UNKNOWN;
 	private boolean waitingForWhereAmI = false;
@@ -48,13 +48,13 @@ public class Hypixel {
 		String ip = FMLClientHandler.instance().getClient().getCurrentServerData().serverIP;
 		MCTools.getMcTools().outputDebug("Connecting to: " + ip);
 		if (ip.toLowerCase().contains("hypixel.net"))
-			shouldBeRunning = true;
+			currentlyOnHypixel = true;
 	}
 
 	@SubscribeEvent
 	public void onServerDisconnect(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
 		MCTools.getMcTools().outputDebug("Disconnected from a server");
-		shouldBeRunning = false;
+		currentlyOnHypixel = false;
 	}
 
 	@SubscribeEvent
@@ -73,7 +73,7 @@ public class Hypixel {
 			// Oops we must not be on Hypixel!
 			MCTools.getMcTools().outputDebug("Oops, we must not be running on Hypixel?!");
 			event.setCanceled(true);
-			shouldBeRunning = false;
+			currentlyOnHypixel = false;
 			waitingForWhereAmI = false;
 		}
 	}
@@ -85,7 +85,7 @@ public class Hypixel {
 
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
 	public void tick(TickEvent.ClientTickEvent event) {
-		if (!shouldBeRunning)
+		if (!currentlyOnHypixel)
 			return;
 		// fire once per tick
 		if (event.phase == TickEvent.Phase.START) return;
@@ -205,7 +205,7 @@ public class Hypixel {
 
 	@SubscribeEvent
 	public void onInteract(EntityInteractEvent event) {
-		if (!shouldBeRunning)
+		if (!currentlyOnHypixel)
 			return;
 		if (event.getTarget() instanceof EntityPlayer && event.getEntityPlayer().isSneaking()) {
 			EntityPlayer attacked = (EntityPlayer) event.getTarget();
