@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mctools",
+  "name": "MC Tools",
+  "description": "The MC Tools mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "https://mctools.connorlinfoot.com",
+  "updateUrl": "",
+  "authorList": ["Connor Linfoot"],
+  "credits": "Connor Linfoot",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
