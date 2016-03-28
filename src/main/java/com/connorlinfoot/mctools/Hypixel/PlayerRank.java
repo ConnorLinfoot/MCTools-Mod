@@ -7,12 +7,16 @@ public enum PlayerRank {
 	VIP,
 	VIP_PLUS,
 	MVP,
-	MVP_PLUS;
+	MVP_PLUS,
+	YOUTUBE,
+	HELPER,
+	MOD,
+	ADMIN;
 
 	public String getNiceName() {
 		switch (this) {
 			case DEFAULT:
-				return "Player"; // Not sure what to actually have here?
+				return "Default"; // Not sure what to actually have here?
 			case VIP:
 				return "VIP";
 			case VIP_PLUS:
@@ -21,6 +25,14 @@ public enum PlayerRank {
 				return "MVP";
 			case MVP_PLUS:
 				return "MVP+";
+			case YOUTUBE:
+				return "YouTube";
+			case HELPER:
+				return "Helper";
+			case MOD:
+				return "Moderator";
+			case ADMIN:
+				return "Admin";
 		}
 		return this.toString();
 	}
@@ -38,6 +50,14 @@ public enum PlayerRank {
 				return TextFormatting.AQUA + "[MVP] " + (includeReset ? TextFormatting.RESET : "");
 			case MVP_PLUS:
 				return TextFormatting.AQUA + "[MVP+] " + (includeReset ? TextFormatting.RESET : "");
+			case YOUTUBE:
+				return TextFormatting.GOLD + "[YT] " + (includeReset ? TextFormatting.RESET : "");
+			case HELPER:
+				return TextFormatting.BLUE + "[HELPER] " + (includeReset ? TextFormatting.RESET : "");
+			case MOD:
+				return TextFormatting.DARK_GREEN + "[MOD] " + (includeReset ? TextFormatting.RESET : "");
+			case ADMIN:
+				return TextFormatting.RED + "[ADMIN] " + (includeReset ? TextFormatting.RESET : "");
 		}
 		return this.toString();
 	}
@@ -52,6 +72,14 @@ public enum PlayerRank {
 			case MVP:
 			case MVP_PLUS:
 				return TextFormatting.AQUA;
+			case YOUTUBE:
+				return TextFormatting.GOLD;
+			case HELPER:
+				return TextFormatting.BLUE;
+			case MOD:
+				return TextFormatting.DARK_GREEN;
+			case ADMIN:
+				return TextFormatting.RED;
 		}
 		return TextFormatting.GRAY;
 	}
@@ -68,6 +96,14 @@ public enum PlayerRank {
 				return MVP;
 			case "MVP+":
 				return MVP_PLUS;
+			case "YT":
+				return YOUTUBE;
+			case "HELPER":
+				return HELPER;
+			case "MOD":
+				return MOD;
+			case "ADMIN":
+				return ADMIN;
 		}
 	}
 
