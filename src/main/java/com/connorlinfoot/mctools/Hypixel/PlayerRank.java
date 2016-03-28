@@ -42,4 +42,33 @@ public enum PlayerRank {
 		return this.toString();
 	}
 
+	public TextFormatting getColor() {
+		switch (this) {
+			case DEFAULT:
+				return TextFormatting.GRAY;
+			case VIP:
+			case VIP_PLUS:
+				return TextFormatting.GREEN;
+			case MVP:
+			case MVP_PLUS:
+				return TextFormatting.AQUA;
+		}
+		return TextFormatting.GRAY;
+	}
+
+	public static PlayerRank fromNiceName(String name) {
+		switch (name.toUpperCase()) {
+			default:
+				return DEFAULT;
+			case "VIP":
+				return VIP;
+			case "VIP+":
+				return VIP_PLUS;
+			case "MVP":
+				return MVP;
+			case "MVP+":
+				return MVP_PLUS;
+		}
+	}
+
 }

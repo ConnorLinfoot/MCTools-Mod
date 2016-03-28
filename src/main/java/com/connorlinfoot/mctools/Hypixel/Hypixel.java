@@ -11,7 +11,11 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -24,6 +28,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Hypixel {
 	private boolean currentlyOnHypixel = false;
@@ -33,7 +39,6 @@ public class Hypixel {
 	private ArrayList<UUID> ignore = new ArrayList<UUID>(); // This is where we store UUID's that should not be looked up, these are usually NPC's
 	private ArrayList<UUID> pending = new ArrayList<UUID>();
 	private Map<UUID, HypixelPlayer> hypixelPlayers = new HashMap<UUID, HypixelPlayer>();
-	//	private Map<UUID, Integer> swKillsCache = new HashMap<UUID, Integer>();
 	private int swKillsUpdates = 0;
 	private long waitUntil = System.currentTimeMillis();
 	private long lastServerChecks = System.currentTimeMillis();
@@ -59,6 +64,55 @@ public class Hypixel {
 
 	@SubscribeEvent
 	public void onChatRecieved(ClientChatReceivedEvent event) {
+		if (!currentlyOnHypixel)
+			return;
+
+		// Try and get the chat string to make names clickable
+		Pattern rankPattern = Pattern.compile("\\[(.*)\\] ([^\\s]+): (.*)"); // Because im bad with regex we will do 2 tests, one with rank and one without
+		Pattern noRankPattern = Pattern.compile("([^\\s]+): (.*)");
+		Matcher rankMatcher = rankPattern.matcher(TextFormatting.getTextWithoutFormattingCodes(event.getMessage().getFormattedText()));
+		Matcher noRankMatcher = noRankPattern.matcher(TextFormatting.getTextWithoutFormattingCodes(event.getMessage().getFormattedText()));
+		String rank = null;
+		String username = null;
+		String chatMessage = null;
+		if (rankMatcher.matches()) {
+			rank = rankMatcher.group(1);
+			username = rankMatcher.group(2);
+			chatMessage = rankMatcher.group(3);
+		} else if (noRankMatcher.matches()) {
+			username = rankMatcher.group(1);
+			chatMessage = rankMatcher.group(2);
+		}
+
+		if (username != null && chatMessage != null) {
+			// We know this is a chat message! :D
+//			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString("Message From: " + username));
+//			Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(chatMessage));
+
+			// Let's develop our own chat message! :D
+			ITextComponent finalComponent = new TextComponentString("");
+			PlayerRank playerRank = PlayerRank.DEFAULT;
+			if (rank != null) {
+				playerRank = PlayerRank.fromNiceName(rank);
+				ITextComponent rankComponent = new TextComponentString(playerRank.getPrefix(true));
+				finalComponent.appendSibling(rankComponent);
+			}
+
+			ITextComponent usernameComponent = new TextComponentString(playerRank.getColor() + username);
+			UUID uuid = Minecraft.getMinecraft().thePlayer.getUniqueID(); // Our UUID for now!
+			usernameComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
+			finalComponent.appendSibling(usernameComponent).appendText(": ");
+
+			ITextComponent messageComponent = new TextComponentString(chatMessage);
+			finalComponent.appendSibling(messageComponent);
+
+//			ITextComponent iTextComponent = new TextComponentString("This is a test!");
+//			UUID uuid = Minecraft.getMinecraft().thePlayer.getUniqueID(); // Our UUID for now!
+//			iTextComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
+//			Minecraft.getMinecraft().thePlayer.addChatMessage(finalComponent);
+			event.setMessage(finalComponent);
+		}
+
 		if (!waitingForWhereAmI)
 			return; // We don't care if the player ran the command or something
 		String message = event.getMessage().getFormattedText();

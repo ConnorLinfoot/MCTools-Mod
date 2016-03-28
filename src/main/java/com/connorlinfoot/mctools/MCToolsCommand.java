@@ -25,7 +25,10 @@ public class MCToolsCommand extends CommandBase {
 			sender.addChatMessage(new TextComponentString(TextFormatting.AQUA + "MC Tools Forge Mod - Version " + MCTools.VERSION));
 			sender.addChatMessage(new TextComponentString(TextFormatting.AQUA + "Created By Connor Linfoot"));
 			sender.addChatMessage(new TextComponentString(TextFormatting.AQUA + "This command currently does nothing... but hey, it works!"));
+			return;
 		}
+
+		sender.addChatMessage(new TextComponentString(TextFormatting.RED + "Unknown args"));
 	}
 
 	@Override
