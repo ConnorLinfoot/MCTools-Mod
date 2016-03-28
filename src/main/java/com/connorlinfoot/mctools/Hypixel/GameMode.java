@@ -32,4 +32,26 @@ public enum GameMode {
 		return this.toString();
 	}
 
+	public String getAPIName() {
+		switch(this) {
+			case SKYWARS:
+				return "SkyWars";
+			case BLITZ_SG:
+				return "HungerGames";
+			case CRAZY_WALLS:
+				return "TrueCombat";
+			case COPS_AND_CRIMS:
+				return "MCGO";
+			case THE_WALLS:
+				return "Walls";
+			case MEGA_WALLS:
+				return "Walls3";
+			case UHC_CHAMPIONS:
+				return "UHC";
+			case UNKNOWN:
+				return "Unknown";
+		}
+		return this.toString();
+	}
+
 }
