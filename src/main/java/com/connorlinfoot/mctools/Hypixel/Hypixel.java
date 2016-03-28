@@ -1,5 +1,6 @@
 package com.connorlinfoot.mctools.Hypixel;
 
+import com.connorlinfoot.mctools.GuiHandler;
 import com.connorlinfoot.mctools.MCTools;
 import com.connorlinfoot.mctools.PlayerRender;
 import net.hypixel.api.HypixelAPI;
@@ -211,7 +212,7 @@ public class Hypixel {
 //			FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("/party invite " + attacked.getName());
 			GuiHandler.playerClicked = attacked.getUniqueID();
 			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
-			entityPlayer.openGui(MCTools.getMcTools(), GuiHandler.MOD_TILE_ENTITY_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
+			entityPlayer.openGui(MCTools.getMcTools(), GuiHandler.HYPIXEL_STATS_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
 		}
 
 	}

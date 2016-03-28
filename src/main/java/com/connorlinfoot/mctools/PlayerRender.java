@@ -18,14 +18,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public class PlayerRender {
-	public static Map<UUID, String> aboveHeadCache = new HashMap<UUID, String>();
+	public static Map<UUID, String> aboveHeadCache = new HashMap<>();
+	public static boolean glow = false;
 
 	@SubscribeEvent
 	public void render(RenderPlayerEvent.Pre event) {
 		if( MCTools.getMcTools().getConfigHandler().isSwapHands() )
 			event.getEntityPlayer().setPrimaryHand(event.getEntityPlayer().getPrimaryHand().opposite());
 
-		if( MCTools.getMcTools().getConfigHandler().isGlowPlayers() )
+		if (MCTools.getMcTools().getConfigHandler().isGlowPlayers() || glow)
 			event.getEntityPlayer().setGlowing(true);
 		else if( event.getEntityPlayer().isGlowing() )
 			event.getEntityPlayer().setGlowing(false);
