@@ -1,5 +1,6 @@
 package com.connorlinfoot.mctools;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -9,6 +10,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
@@ -23,6 +25,7 @@ public class PlayerRender {
 
 	@SubscribeEvent
 	public void render(RenderPlayerEvent.Pre event) {
+		EntityPlayer entityPlayer = event.getEntityPlayer();
 		if( MCTools.getMcTools().getConfigHandler().isSwapHands() )
 			event.getEntityPlayer().setPrimaryHand(event.getEntityPlayer().getPrimaryHand().opposite());
 
@@ -30,6 +33,13 @@ public class PlayerRender {
 			event.getEntityPlayer().setGlowing(true);
 		else if( event.getEntityPlayer().isGlowing() )
 			event.getEntityPlayer().setGlowing(false);
+
+		if (entityPlayer.getUniqueID().toString().equals("ad8fefaa-8351-454b-b739-a4eaa872173f")) { // Connor Linfoot ;D
+			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+		}
 
 		String s;
 		if (event.getEntityPlayer().getUniqueID().equals(MCTools.UUID)) return;
