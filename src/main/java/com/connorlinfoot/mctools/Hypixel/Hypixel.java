@@ -17,6 +17,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -33,6 +34,7 @@ import java.util.regex.Pattern;
 
 public class Hypixel {
 	private boolean currentlyOnHypixel = false;
+	private boolean playerInGame = false;
 	private String subServer = "";
 	private GameMode gameMode = GameMode.UNKNOWN;
 	private boolean waitingForWhereAmI = false;
@@ -68,42 +70,44 @@ public class Hypixel {
 			return;
 
 		// Try and get the chat string to make names clickable
-		Pattern rankPattern = Pattern.compile("\\[(.*)\\] ([^\\s]+): (.*)"); // Because im bad with regex we will do 2 tests, one with rank and one without
-		Pattern noRankPattern = Pattern.compile("([^\\s]+): (.*)");
-		Matcher rankMatcher = rankPattern.matcher(TextFormatting.getTextWithoutFormattingCodes(event.getMessage().getFormattedText()));
-		Matcher noRankMatcher = noRankPattern.matcher(TextFormatting.getTextWithoutFormattingCodes(event.getMessage().getFormattedText()));
-		String rank = null;
-		String username = null;
-		String chatMessage = null;
-		if (rankMatcher.matches()) {
-			rank = rankMatcher.group(1);
-			username = rankMatcher.group(2);
-			chatMessage = rankMatcher.group(3);
-		} else if (noRankMatcher.matches()) {
-			username = rankMatcher.group(1);
-			chatMessage = rankMatcher.group(2);
-		}
-
-		if (username != null && chatMessage != null) {
-			// Let's develop our own chat message! :D
-			ITextComponent finalComponent = new TextComponentString("");
-			PlayerRank playerRank = PlayerRank.DEFAULT;
-			if (rank != null) {
-				playerRank = PlayerRank.fromNiceName(rank);
-				ITextComponent rankComponent = new TextComponentString(playerRank.getPrefix(true));
-				finalComponent.appendSibling(rankComponent);
+		if (!playerInGame) {
+			Pattern rankPattern = Pattern.compile("\\[(.*)\\] ([^\\s]+): (.*)"); // Because im bad with regex we will do 2 tests, one with rank and one without
+			Pattern noRankPattern = Pattern.compile("([^\\s]+): (.*)");
+			Matcher rankMatcher = rankPattern.matcher(TextFormatting.getTextWithoutFormattingCodes(event.getMessage().getFormattedText()));
+			Matcher noRankMatcher = noRankPattern.matcher(TextFormatting.getTextWithoutFormattingCodes(event.getMessage().getFormattedText()));
+			String rank = null;
+			String username = null;
+			String chatMessage = null;
+			if (rankMatcher.matches()) {
+				rank = rankMatcher.group(1);
+				username = rankMatcher.group(2);
+				chatMessage = rankMatcher.group(3);
+			} else if (noRankMatcher.matches()) {
+				username = rankMatcher.group(1);
+				chatMessage = rankMatcher.group(2);
 			}
 
-			ITextComponent usernameComponent = new TextComponentString(playerRank.getColor() + username);
-			EntityPlayer theChatPlayer = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username);
-			UUID uuid = theChatPlayer.getUniqueID(); // Our UUID for now!
-			usernameComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
-			finalComponent.appendSibling(usernameComponent).appendText(": ");
+			if (username != null && chatMessage != null) {
+				// Let's develop our own chat message! :D
+				ITextComponent finalComponent = new TextComponentString("");
+				PlayerRank playerRank = PlayerRank.DEFAULT;
+				if (rank != null) {
+					playerRank = PlayerRank.fromNiceName(rank);
+					ITextComponent rankComponent = new TextComponentString(playerRank.getPrefix(true));
+					finalComponent.appendSibling(rankComponent);
+				}
 
-			ITextComponent messageComponent = new TextComponentString(chatMessage);
-			finalComponent.appendSibling(messageComponent);
+				ITextComponent usernameComponent = new TextComponentString(playerRank.getColor() + username);
+				EntityPlayer theChatPlayer = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username);
+				UUID uuid = theChatPlayer.getUniqueID(); // Our UUID for now!
+				usernameComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
+				finalComponent.appendSibling(usernameComponent).appendText(": ");
 
-			event.setMessage(finalComponent);
+				ITextComponent messageComponent = new TextComponentString(chatMessage);
+				finalComponent.appendSibling(messageComponent);
+
+				event.setMessage(finalComponent);
+			}
 		}
 
 		if (!waitingForWhereAmI)
@@ -115,6 +119,7 @@ public class Hypixel {
 			waitingForWhereAmI = false;
 			event.setCanceled(true);
 			subServer = message.substring(34, message.length() - 2);
+			playerInGame = !subServer.contains("lobby");
 			MCTools.getMcTools().outputDebug("Player was found to be on Hypixel subserver: " + subServer);
 		} else if (message.contains("Unknown command")) {
 			// Oops we must not be on Hypixel!
@@ -128,6 +133,16 @@ public class Hypixel {
 	public void runWhereAmICommand() {
 		waitingForWhereAmI = true;
 		FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("/whereami");
+	}
+
+	@SubscribeEvent
+	public void onThatFuckingTickToFixFuckingHypixelsShit(RenderHandEvent event) {
+		if (!currentlyOnHypixel)
+			return;
+		if (Minecraft.getMinecraft().thePlayer != null) {
+			if (Minecraft.getMinecraft().thePlayer.getHeldItemOffhand() != null)
+				event.setCanceled(true);
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
