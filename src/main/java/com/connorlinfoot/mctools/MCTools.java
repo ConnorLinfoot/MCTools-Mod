@@ -5,6 +5,8 @@ import net.hypixel.api.HypixelAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -27,6 +29,7 @@ import java.util.UUID;
 @Mod(modid = MCTools.MODID, version = MCTools.VERSION, guiFactory = "com.connorlinfoot.mctools.MCToolsGuiFactory")
 public class MCTools {
 	private static MCTools mcTools;
+	public static final String prefix = TextFormatting.GRAY + "[" + TextFormatting.GOLD + "MC Tools" + TextFormatting.GRAY + "] " + TextFormatting.RESET;
 	public static final String MODID = "mctools";
 	public static final String VERSION = "1.0";
 	private ConfigHandler configHandler;
@@ -69,6 +72,10 @@ public class MCTools {
 			if (entityPlayer.isSneaking() && getConfigHandler().isDebug()) {
 				entityPlayer.openGui(mcTools, GuiHandler.TEXT_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
 			} else {
+				if (!hypixel.isCurrentlyOnHypixel()) {
+					entityPlayer.addChatMessage(new TextComponentString(prefix + TextFormatting.RED + "You are not currently on any supported servers"));
+					return;
+				}
 				entityPlayer.openGui(mcTools, GuiHandler.QUICK_ACTIONS_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
 			}
 		}

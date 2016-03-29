@@ -95,7 +95,8 @@ public class Hypixel {
 			}
 
 			ITextComponent usernameComponent = new TextComponentString(playerRank.getColor() + username);
-			UUID uuid = Minecraft.getMinecraft().thePlayer.getUniqueID(); // Our UUID for now!
+			EntityPlayer theChatPlayer = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username);
+			UUID uuid = theChatPlayer.getUniqueID(); // Our UUID for now!
 			usernameComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
 			finalComponent.appendSibling(usernameComponent).appendText(": ");
 
@@ -278,6 +279,10 @@ public class Hypixel {
 
 	public GameMode getGameMode() {
 		return gameMode;
+	}
+
+	public boolean isCurrentlyOnHypixel() {
+		return currentlyOnHypixel;
 	}
 
 }
