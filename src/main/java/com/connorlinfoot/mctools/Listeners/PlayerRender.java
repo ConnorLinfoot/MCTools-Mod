@@ -1,5 +1,6 @@
-package com.connorlinfoot.mctools;
+package com.connorlinfoot.mctools.Listeners;
 
+import com.connorlinfoot.mctools.MCTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;

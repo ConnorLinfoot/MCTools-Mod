@@ -1,8 +1,8 @@
 package com.connorlinfoot.mctools.Hypixel;
 
-import com.connorlinfoot.mctools.GuiHandler;
+import com.connorlinfoot.mctools.Handlers.GuiHandler;
+import com.connorlinfoot.mctools.Listeners.PlayerRender;
 import com.connorlinfoot.mctools.MCTools;
-import com.connorlinfoot.mctools.PlayerRender;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.reply.PlayerReply;
 import net.hypixel.api.util.Callback;

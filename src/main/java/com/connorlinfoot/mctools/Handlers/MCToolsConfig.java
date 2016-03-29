@@ -1,5 +1,6 @@
-package com.connorlinfoot.mctools;
+package com.connorlinfoot.mctools.Handlers;
 
+import com.connorlinfoot.mctools.MCTools;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;

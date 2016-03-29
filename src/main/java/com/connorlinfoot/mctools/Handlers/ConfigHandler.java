@@ -1,4 +1,4 @@
-package com.connorlinfoot.mctools;
+package com.connorlinfoot.mctools.Handlers;
 
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;

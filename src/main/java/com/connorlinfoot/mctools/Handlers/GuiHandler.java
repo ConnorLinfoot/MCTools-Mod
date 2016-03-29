@@ -1,6 +1,8 @@
-package com.connorlinfoot.mctools;
+package com.connorlinfoot.mctools.Handlers;
 
 import com.connorlinfoot.mctools.Hypixel.StatsGui;
+import com.connorlinfoot.mctools.QuickActionsGUI;
+import com.connorlinfoot.mctools.TextGUI;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;

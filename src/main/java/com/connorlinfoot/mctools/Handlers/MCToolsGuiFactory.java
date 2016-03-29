@@ -1,4 +1,4 @@
-package com.connorlinfoot.mctools;
+package com.connorlinfoot.mctools.Handlers;
 
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.client.Minecraft;

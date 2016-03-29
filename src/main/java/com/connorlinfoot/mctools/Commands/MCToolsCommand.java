@@ -1,5 +1,7 @@
-package com.connorlinfoot.mctools;
+package com.connorlinfoot.mctools.Commands;
 
+import com.connorlinfoot.mctools.Handlers.GuiHandler;
+import com.connorlinfoot.mctools.MCTools;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -24,7 +26,7 @@ public class MCToolsCommand extends CommandBase {
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException { // TODO Make these into switches
 		if (args.length == 0 || (args.length > 0 && args[0].equalsIgnoreCase("help"))) {
 			sender.addChatMessage(new TextComponentString(TextFormatting.AQUA + "MC Tools Forge Mod - Version " + MCTools.VERSION));
 			sender.addChatMessage(new TextComponentString(TextFormatting.AQUA + "Created By Connor Linfoot"));

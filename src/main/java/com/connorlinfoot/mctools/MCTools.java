@@ -1,6 +1,10 @@
 package com.connorlinfoot.mctools;
 
+import com.connorlinfoot.mctools.Commands.MCToolsCommand;
+import com.connorlinfoot.mctools.Handlers.ConfigHandler;
+import com.connorlinfoot.mctools.Handlers.GuiHandler;
 import com.connorlinfoot.mctools.Hypixel.Hypixel;
+import com.connorlinfoot.mctools.Listeners.PlayerRender;
 import net.hypixel.api.HypixelAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -26,7 +30,7 @@ import org.lwjgl.input.Keyboard;
 
 import java.util.UUID;
 
-@Mod(modid = MCTools.MODID, version = MCTools.VERSION, guiFactory = "com.connorlinfoot.mctools.MCToolsGuiFactory")
+@Mod(modid = MCTools.MODID, version = MCTools.VERSION, guiFactory = "com.connorlinfoot.mctools.Handlers.MCToolsGuiFactory")
 public class MCTools {
 	private static MCTools mcTools;
 	public static final String prefix = TextFormatting.GRAY + "[" + TextFormatting.GOLD + "MC Tools" + TextFormatting.GRAY + "] " + TextFormatting.RESET;
