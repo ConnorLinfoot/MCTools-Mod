@@ -18,6 +18,9 @@ public class ConfigHandler {
 		isDebug();
 		getAPIKey();
 		isSwapHands();
+		isDisplayGui();
+		isDisplayFPS();
+		isDisplayCords();
 		config.save();
 	}
 
@@ -51,6 +54,30 @@ public class ConfigHandler {
 
 	public boolean isSwapHands() {
 		return getSwapHands().getBoolean();
+	}
+
+	public Property getDisplayGui() {
+		return config.get(Configuration.CATEGORY_CLIENT, "Display GUI", false, "Disabling this will hide all in-game on screen GUI's.");
+	}
+
+	public boolean isDisplayGui() {
+		return getDisplayGui().getBoolean();
+	}
+
+	public Property getDisplayFPS() {
+		return config.get(Configuration.CATEGORY_CLIENT, "Display FPS", false, "");
+	}
+
+	public boolean isDisplayFPS() {
+		return getDisplayFPS().getBoolean();
+	}
+
+	public Property getDisplayCords() {
+		return config.get(Configuration.CATEGORY_CLIENT, "Display Cordinates", false, "");
+	}
+
+	public boolean isDisplayCords() {
+		return getDisplayCords().getBoolean();
 	}
 
 	public Configuration getConfig() {

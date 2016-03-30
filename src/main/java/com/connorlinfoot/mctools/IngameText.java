@@ -7,6 +7,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
+
 public class IngameText extends Gui {
 	private Minecraft mc;
 
@@ -30,9 +32,26 @@ public class IngameText extends Gui {
 //		minecraft.fontRendererObj.drawString(string, (width / 2) - (strWidth / 2), (height / 2) + 8, 0xFFFFFF, true);
 
 		// Render text in bottom left
-		if (!minecraft.ingameGUI.getChatGUI().getChatOpen()) {
-			String bottomLeft = TextFormatting.GOLD + "MC Tools Mod v" + MCTools.VERSION + " - FPS: " + Minecraft.getDebugFPS();
-			minecraft.fontRendererObj.drawString(bottomLeft, 4, height - 12, 0xFFFFFF, true);
+		if (!Minecraft.getMinecraft().gameSettings.showDebugInfo && MCTools.getMcTools().getConfigHandler().isDisplayGui()) {
+			ArrayList<String> display = new ArrayList<>();
+
+			display.add(TextFormatting.GOLD + "MC Tools Beta v" + MCTools.VERSION);
+
+			if( MCTools.getMcTools().getConfigHandler().isDisplayFPS() )
+				display.add(TextFormatting.GOLD + "FPS: " + TextFormatting.WHITE + Minecraft.getDebugFPS());
+
+			if( MCTools.getMcTools().getConfigHandler().isDisplayCords() ) {
+				display.add(TextFormatting.GOLD + "X: " + TextFormatting.WHITE + Math.floor(entityPlayer.posX));
+				display.add(TextFormatting.GOLD + "Y: " + TextFormatting.WHITE + Math.floor(entityPlayer.posY));
+				display.add(TextFormatting.GOLD + "Z: " + TextFormatting.WHITE + Math.floor(entityPlayer.posZ));
+			}
+
+			int lineHeight = 4;
+			for( String line : display ) {
+				minecraft.fontRendererObj.drawString(line, 4, lineHeight, 0xFFFFFF, true);
+				lineHeight = lineHeight + 10;
+			}
+
 		}
 
 

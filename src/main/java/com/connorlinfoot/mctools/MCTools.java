@@ -37,7 +37,7 @@ public class MCTools {
 	public static final String MODID = "mctools";
 	public static final String VERSION = "0.1";
 	private ConfigHandler configHandler;
-	private Hypixel hypixel;
+	private Hypixel hypixel = new Hypixel();
 	public static KeyBinding quickActions;
 
 	public static UUID UUID;
@@ -47,8 +47,6 @@ public class MCTools {
 	public void preInit(FMLPreInitializationEvent event) {
 		mcTools = this;
 		configHandler = new ConfigHandler(event.getSuggestedConfigurationFile());
-
-		hypixel = new Hypixel();
 		FMLCommonHandler.instance().bus().register(hypixel);
 	}
 

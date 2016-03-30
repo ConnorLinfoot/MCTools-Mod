@@ -47,7 +47,7 @@ public class Hypixel {
 	private long lastServerChecks = System.currentTimeMillis();
 
 	public Hypixel() {
-		FMLCommonHandler.instance().bus().register(new Keybindings()); // Register key bindings
+		FMLCommonHandler.instance().bus().register(new Keybindings(this)); // Register key bindings
 	}
 
 	@SubscribeEvent
