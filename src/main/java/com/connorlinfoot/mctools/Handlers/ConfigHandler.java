@@ -17,7 +17,6 @@ public class ConfigHandler {
 		isSendData();
 		isDebug();
 		getAPIKey();
-		isGlowPlayers();
 		isSwapHands();
 		config.save();
 	}
@@ -44,14 +43,6 @@ public class ConfigHandler {
 
 	public boolean isSendData() {
 		return getSendData().getBoolean();
-	}
-
-	public Property getGlowPlayers() {
-		return config.get(Configuration.CATEGORY_CLIENT, "Glow Players", false, "");
-	}
-
-	public boolean isGlowPlayers() {
-		return getGlowPlayers().getBoolean();
 	}
 
 	public Property getSwapHands() {

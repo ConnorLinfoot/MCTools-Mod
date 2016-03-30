@@ -38,7 +38,6 @@ public class MCTools {
 	public static final String VERSION = "1.0";
 	private ConfigHandler configHandler;
 	private Hypixel hypixel;
-	public static KeyBinding glowKey;
 	public static KeyBinding quickActions;
 
 	public static UUID UUID;
@@ -57,9 +56,7 @@ public class MCTools {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(mcTools, new GuiHandler());
-		glowKey = new KeyBinding("Glow Players", Keyboard.KEY_G, "MC Tools");
 		quickActions = new KeyBinding("Quick Actions", Keyboard.KEY_X, "MC Tools");
-		ClientRegistry.registerKeyBinding(glowKey);
 		ClientRegistry.registerKeyBinding(quickActions);
 
 		// Command test
@@ -69,8 +66,6 @@ public class MCTools {
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		if (glowKey.isPressed())
-			PlayerRender.glow = !PlayerRender.glow;
 		if (quickActions.isPressed()) {
 			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 			if (entityPlayer.isSneaking() && getConfigHandler().isDebug()) {

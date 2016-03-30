@@ -22,18 +22,12 @@ import java.util.UUID;
 
 public class PlayerRender {
 	public static Map<UUID, String> aboveHeadCache = new HashMap<>();
-	public static boolean glow = false;
 
 	@SubscribeEvent
 	public void render(RenderPlayerEvent.Pre event) {
 		EntityPlayer entityPlayer = event.getEntityPlayer();
 		if( MCTools.getMcTools().getConfigHandler().isSwapHands() )
 			event.getEntityPlayer().setPrimaryHand(event.getEntityPlayer().getPrimaryHand().opposite());
-
-		if (MCTools.getMcTools().getConfigHandler().isGlowPlayers() || glow)
-			event.getEntityPlayer().setGlowing(true);
-		else if( event.getEntityPlayer().isGlowing() )
-			event.getEntityPlayer().setGlowing(false);
 
 		if (entityPlayer.getUniqueID().toString().equals("ad8fefaa-8351-454b-b739-a4eaa872173f")) { // Connor Linfoot ;D
 			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
