@@ -26,7 +26,7 @@ public class PlayerRender {
 	@SubscribeEvent
 	public void render(RenderPlayerEvent.Pre event) {
 		EntityPlayer entityPlayer = event.getEntityPlayer();
-		if( MCTools.getMcTools().getConfigHandler().isSwapHands() )
+		if (MCTools.getMcTools().getConfigHandler().isSwapHands())
 			event.getEntityPlayer().setPrimaryHand(event.getEntityPlayer().getPrimaryHand().opposite());
 
 		if (entityPlayer.getUniqueID().toString().equals("ad8fefaa-8351-454b-b739-a4eaa872173f")) { // Connor Linfoot ;D

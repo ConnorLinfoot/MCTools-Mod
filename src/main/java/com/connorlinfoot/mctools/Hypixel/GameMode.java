@@ -11,7 +11,7 @@ public enum GameMode {
 	UNKNOWN;
 
 	public String getNiceName() {
-		switch(this) {
+		switch (this) {
 			case SKYWARS:
 				return "SkyWars";
 			case BLITZ_SG:
@@ -33,7 +33,7 @@ public enum GameMode {
 	}
 
 	public String getAPIName() {
-		switch(this) {
+		switch (this) {
 			case SKYWARS:
 				return "SkyWars";
 			case BLITZ_SG:

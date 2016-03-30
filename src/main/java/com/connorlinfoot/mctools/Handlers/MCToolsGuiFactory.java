@@ -41,7 +41,7 @@ public class MCToolsGuiFactory implements IModGuiFactory {
 
 			@Override
 			public void addWidgets(List<Gui> widgets, int x, int y, int w, int h) {
-				widgets.add(new GuiButton(100, x+10, y+10, "HELLO"));
+				widgets.add(new GuiButton(100, x + 10, y + 10, "HELLO"));
 			}
 
 			@Override

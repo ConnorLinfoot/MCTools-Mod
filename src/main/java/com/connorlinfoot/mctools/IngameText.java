@@ -37,17 +37,17 @@ public class IngameText extends Gui {
 
 			display.add(TextFormatting.GOLD + "MC Tools Beta v" + MCTools.VERSION);
 
-			if( MCTools.getMcTools().getConfigHandler().isDisplayFPS() )
+			if (MCTools.getMcTools().getConfigHandler().isDisplayFPS())
 				display.add(TextFormatting.GOLD + "FPS: " + TextFormatting.WHITE + Minecraft.getDebugFPS());
 
-			if( MCTools.getMcTools().getConfigHandler().isDisplayCords() ) {
+			if (MCTools.getMcTools().getConfigHandler().isDisplayCords()) {
 				display.add(TextFormatting.GOLD + "X: " + TextFormatting.WHITE + Math.floor(entityPlayer.posX));
 				display.add(TextFormatting.GOLD + "Y: " + TextFormatting.WHITE + Math.floor(entityPlayer.posY));
 				display.add(TextFormatting.GOLD + "Z: " + TextFormatting.WHITE + Math.floor(entityPlayer.posZ));
 			}
 
 			int lineHeight = 4;
-			for( String line : display ) {
+			for (String line : display) {
 				minecraft.fontRendererObj.drawString(line, 4, lineHeight, 0xFFFFFF, true);
 				lineHeight = lineHeight + 10;
 			}
