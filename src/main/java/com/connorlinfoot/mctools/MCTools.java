@@ -40,7 +40,7 @@ public class MCTools {
 	private Hypixel hypixel = new Hypixel();
 	public static KeyBinding quickActions;
 
-	public static UUID UUID;
+	public static UUID playerUUID;
 	String clientUUID;
 
 	@EventHandler
@@ -80,14 +80,22 @@ public class MCTools {
 	@EventHandler
 	public void init(FMLPostInitializationEvent event) {
 		Minecraft minecraft = FMLClientHandler.instance().getClient();
-		UUID = minecraft.getSession().getProfile().getId();
-		clientUUID = UUID.toString().replaceAll("-", "");
+		playerUUID = minecraft.getSession().getProfile().getId();
+		clientUUID = playerUUID.toString().replaceAll("-", "");
 		FMLCommonHandler.instance().bus().register(this);
 		MinecraftForge.EVENT_BUS.register(new PlayerRender());
 
 		try {
 			String key = configHandler.getAPIKey();
-			HypixelAPI.getInstance().setApiKey(java.util.UUID.fromString(key));
+			UUID apiKey = null;
+			try {
+				apiKey = UUID.fromString(key);
+			} catch (Exception ignored) {
+			}
+			if (apiKey != null) {
+				HypixelAPI.getInstance().setApiKey(apiKey);
+				hypixel.setConnectedToAPI(true);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

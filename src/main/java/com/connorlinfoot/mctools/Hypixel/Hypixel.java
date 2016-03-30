@@ -36,12 +36,13 @@ import java.util.regex.Pattern;
 public class Hypixel {
 	private boolean currentlyOnHypixel = false;
 	private boolean playerInGame = false;
+	private boolean connectedToAPI = false;
 	private String subServer = "";
 	private GameMode gameMode = GameMode.UNKNOWN;
 	private boolean waitingForWhereAmI = false;
-	private ArrayList<UUID> ignore = new ArrayList<UUID>(); // This is where we store UUID's that should not be looked up, these are usually NPC's
-	private ArrayList<UUID> pending = new ArrayList<UUID>();
-	private Map<UUID, HypixelPlayer> hypixelPlayers = new HashMap<UUID, HypixelPlayer>();
+	private ArrayList<UUID> ignore = new ArrayList<>(); // This is where we store playerUUID's that should not be looked up, these are usually NPC's
+	private ArrayList<UUID> pending = new ArrayList<>();
+	private Map<UUID, HypixelPlayer> hypixelPlayers = new HashMap<>();
 	private int swKillsUpdates = 0;
 	private long waitUntil = System.currentTimeMillis();
 	private long lastServerChecks = System.currentTimeMillis();
@@ -101,7 +102,7 @@ public class Hypixel {
 
 				ITextComponent usernameComponent = new TextComponentString(playerRank.getColor() + username);
 				EntityPlayer theChatPlayer = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username);
-				UUID uuid = theChatPlayer.getUniqueID(); // Our UUID for now!
+				UUID uuid = theChatPlayer.getUniqueID(); // Our playerUUID for now!
 				usernameComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
 				finalComponent.appendSibling(usernameComponent).appendText(": ");
 
@@ -189,6 +190,10 @@ public class Hypixel {
 				return;
 			}
 
+			if (getGameMode() == GameMode.UNKNOWN) {
+				MCTools.getMcTools().outputDebug("We don't know what game you're playing!");
+			}
+
 			MCTools.getMcTools().outputDebug("You are currently playing: " + gameMode.getNiceName());
 
 			if (subServer.contains("lobby")) {
@@ -198,6 +203,11 @@ public class Hypixel {
 
 			if (MCTools.getMcTools().getConfigHandler().getAPIKey() == null || MCTools.getMcTools().getConfigHandler().getAPIKey().equals("NO_KEY") || MCTools.getMcTools().getConfigHandler().getAPIKey().equals("")) {
 				MCTools.getMcTools().outputDebug("API Key has not been set!");
+				return;
+			}
+
+			if (!isConnectedToAPI()) {
+				MCTools.getMcTools().outputDebug("MC Tools is currently not connected to the Hypixel API");
 				return;
 			}
 
@@ -246,7 +256,8 @@ public class Hypixel {
 			public void callback(Throwable failCause, PlayerReply result) {
 				pending.remove(uuid);
 				if (failCause != null) {
-					failCause.printStackTrace();
+					System.out.println("Hypixel API Error: " + failCause.getMessage());
+					Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(TextFormatting.RED + "Hypixel API Error: " + failCause.getMessage()));
 					return;
 				}
 				if (!result.isSuccess()) {
@@ -254,7 +265,7 @@ public class Hypixel {
 					return;
 				}
 				if (result.getPlayer() == null && result.getCause() == null && result.isSuccess()) {
-					// We assume it's because the UUID belongs to an NPC
+					// We assume it's because the playerUUID belongs to an NPC
 					ignore.add(uuid);
 					return;
 				}
@@ -300,6 +311,14 @@ public class Hypixel {
 
 	public boolean isCurrentlyOnHypixel() {
 		return currentlyOnHypixel;
+	}
+
+	public boolean isConnectedToAPI() {
+		return connectedToAPI;
+	}
+
+	public void setConnectedToAPI(boolean connectedToAPI) {
+		this.connectedToAPI = connectedToAPI;
 	}
 
 }

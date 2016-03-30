@@ -37,7 +37,7 @@ public class PlayerRender {
 		}
 
 		String s;
-		if (event.getEntityPlayer().getUniqueID().equals(MCTools.UUID)) return;
+		if (event.getEntityPlayer().getUniqueID().equals(MCTools.playerUUID)) return;
 		if (!event.getEntityPlayer().isSneaking() && !event.getEntityPlayer().isInvisible() && (s = aboveHeadCache.get(event.getEntityPlayer().getUniqueID())) != null) {
 			double offset = 0.3;
 			Scoreboard scoreboard = event.getEntityPlayer().getWorldScoreboard();
