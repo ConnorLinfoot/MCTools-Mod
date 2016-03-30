@@ -203,11 +203,13 @@ public class Hypixel {
 
 			if (MCTools.getMcTools().getConfigHandler().getAPIKey() == null || MCTools.getMcTools().getConfigHandler().getAPIKey().equals("NO_KEY") || MCTools.getMcTools().getConfigHandler().getAPIKey().equals("")) {
 				MCTools.getMcTools().outputDebug("API Key has not been set!");
+				// TODO Close GUI if open here
 				return;
 			}
 
 			if (!isConnectedToAPI()) {
 				MCTools.getMcTools().outputDebug("MC Tools is currently not connected to the Hypixel API");
+				// TODO Close GUI if open here
 				return;
 			}
 
