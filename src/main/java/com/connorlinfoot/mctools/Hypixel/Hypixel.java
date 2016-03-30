@@ -136,7 +136,7 @@ public class Hypixel {
 	}
 
 	@SubscribeEvent
-	public void onThatFuckingTickToFixFuckingHypixelsShit(RenderHandEvent event) {
+	public void fixHypixelSwordShieldBug(RenderHandEvent event) {
 		if (!currentlyOnHypixel)
 			return;
 		if (Minecraft.getMinecraft().thePlayer != null) {
