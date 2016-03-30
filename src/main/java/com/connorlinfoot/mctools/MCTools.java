@@ -42,7 +42,6 @@ public class MCTools {
 
 	public static UUID UUID;
 	String clientUUID;
-	boolean started = false;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -91,11 +90,6 @@ public class MCTools {
 		try {
 			String key = configHandler.getAPIKey();
 			HypixelAPI.getInstance().setApiKey(java.util.UUID.fromString(key));
-
-			started = true;
-//			Hypixel hypixel = new Hypixel();
-//			FMLCommonHandler.instance().bus().register(hypixel);
-//			hypixel.updatePlayerData(UUID);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

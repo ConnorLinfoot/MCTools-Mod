@@ -20,6 +20,7 @@ import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -46,6 +47,7 @@ public class Hypixel {
 	private long lastServerChecks = System.currentTimeMillis();
 
 	public Hypixel() {
+		FMLCommonHandler.instance().bus().register(new Keybindings()); // Register key bindings
 	}
 
 	@SubscribeEvent
