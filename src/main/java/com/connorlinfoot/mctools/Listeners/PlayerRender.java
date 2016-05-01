@@ -22,6 +22,7 @@ import java.util.UUID;
 
 public class PlayerRender {
 	public static Map<UUID, String> aboveHeadCache = new HashMap<>();
+	public static HashMap<UUID, EnumParticleTypes> particles = new HashMap<>();
 
 	@SubscribeEvent
 	public void render(RenderPlayerEvent.Pre event) {
@@ -29,11 +30,18 @@ public class PlayerRender {
 		if (MCTools.getMcTools().getConfigHandler().isSwapHands())
 			event.getEntityPlayer().setPrimaryHand(event.getEntityPlayer().getPrimaryHand().opposite());
 
-		if (entityPlayer.getUniqueID().toString().equals("ad8fefaa-8351-454b-b739-a4eaa872173f")) { // Connor Linfoot ;D
-			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
-			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
-			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
-			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.REDSTONE, entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+//		if (entityPlayer.getUniqueID().toString().equals("ad8fefaa-8351-454b-b739-a4eaa872173f") || entityPlayer.getUniqueID().toString().equals("a6ab3a27-d471-44bb-9ab2-27a284257130")) { // Connor Linfoot ;D
+//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+//		}
+
+		if( particles.containsKey(entityPlayer.getUniqueID())) {
+			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
+			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 		}
 
 		String s;

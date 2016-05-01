@@ -1,6 +1,8 @@
 package com.connorlinfoot.mctools.Commands;
 
 import com.connorlinfoot.mctools.Handlers.GuiHandler;
+import com.connorlinfoot.mctools.Handlers.ParticleFetchHandler;
+import com.connorlinfoot.mctools.Listeners.PlayerRender;
 import com.connorlinfoot.mctools.MCTools;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.CommandBase;
@@ -9,11 +11,13 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 
 import java.util.UUID;
 
 public class MCToolsCommand extends CommandBase {
+	public static String particle = "SLIME";
 
 	@Override
 	public String getCommandName() {
@@ -42,8 +46,19 @@ public class MCToolsCommand extends CommandBase {
 				entityPlayer.openGui(MCTools.getMcTools(), GuiHandler.HYPIXEL_STATS_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
 			}
 			return;
-		}
+		} else if( args.length >= 1 && args[0].equalsIgnoreCase("ping")) {
+			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+			return;
+		} else if( args.length >= 1 && args[0].equalsIgnoreCase("clear")) {
+			PlayerRender.particles.clear();
+			MCTools.particleFetchHandler.clear();
 
+			return;
+		} else if( args.length >= 1 && args[0].equalsIgnoreCase("run")) {
+			MCTools.particleFetchHandler.run();
+			return;
+		}
+		sender.addChatMessage(new TextComponentString(TextFormatting.AQUA + "Cleared particles"));
 		sender.addChatMessage(new TextComponentString(MCTools.prefix + TextFormatting.RED + "Unknown args"));
 	}
 

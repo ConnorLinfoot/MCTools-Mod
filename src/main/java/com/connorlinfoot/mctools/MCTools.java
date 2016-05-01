@@ -3,16 +3,22 @@ package com.connorlinfoot.mctools;
 import com.connorlinfoot.mctools.Commands.MCToolsCommand;
 import com.connorlinfoot.mctools.Handlers.ConfigHandler;
 import com.connorlinfoot.mctools.Handlers.GuiHandler;
+import com.connorlinfoot.mctools.Handlers.ParticleFetchHandler;
 import com.connorlinfoot.mctools.Hypixel.Hypixel;
 import com.connorlinfoot.mctools.Listeners.PlayerRender;
 import net.hypixel.api.HypixelAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -22,8 +28,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.lwjgl.input.Keyboard;
@@ -39,6 +47,7 @@ public class MCTools {
 	private ConfigHandler configHandler;
 	private Hypixel hypixel = new Hypixel();
 	public static KeyBinding quickActions;
+	public static ParticleFetchHandler particleFetchHandler;
 
 	public static UUID playerUUID;
 	String clientUUID;
@@ -52,6 +61,7 @@ public class MCTools {
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		particleFetchHandler = new ParticleFetchHandler();
 		NetworkRegistry.INSTANCE.registerGuiHandler(mcTools, new GuiHandler());
 		quickActions = new KeyBinding("Quick Actions", Keyboard.KEY_X, "MC Tools");
 		ClientRegistry.registerKeyBinding(quickActions);
@@ -130,6 +140,44 @@ public class MCTools {
 
 	public Hypixel getHypixel() {
 		return hypixel;
+	}
+
+	@SubscribeEvent
+	public void onArrowNock(ArrowNockEvent event)  {
+		System.out.println(event.getEntity());
+		System.out.println(event.getEntityLiving());
+		System.out.println(event.getEntityPlayer());
+	}
+
+	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
+	public void tick(TickEvent.ClientTickEvent event) {
+		// fire once per tick
+		if (event.phase == TickEvent.Phase.START) return;
+		Minecraft mc = Minecraft.getMinecraft();
+		if (!mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null) {
+			// Find if the player is in a lobby or not
+			for (EntityPlayer entityPlayer : mc.theWorld.playerEntities) {
+				final UUID uuid = entityPlayer.getUniqueID();
+				particleFetchHandler.addUUID(uuid);
+			}
+
+			for(Entity entity : mc.theWorld.getLoadedEntityList()) {
+				if( entity instanceof EntityArrow ) {
+					EntityArrow arrow = (EntityArrow) entity;
+					if( arrow.shootingEntity != null ) {
+						UUID uuid = arrow.shootingEntity.getUniqueID();
+						if(!PlayerRender.particles.containsKey(uuid))
+							continue;
+						EnumParticleTypes particle = PlayerRender.particles.get(uuid);
+						Minecraft.getMinecraft().theWorld.spawnParticle(particle, arrow.posX, arrow.posY, arrow.posZ, 0.0D, 0.0D, 0.0D);
+						Minecraft.getMinecraft().theWorld.spawnParticle(particle, arrow.posX, arrow.posY, arrow.posZ, 0.0D, 0.0D, 0.0D);
+						Minecraft.getMinecraft().theWorld.spawnParticle(particle, arrow.posX, arrow.posY, arrow.posZ, 0.0D, 0.0D, 0.0D);
+					}
+				}
+			}
+
+			particleFetchHandler.run();
+		}
 	}
 
 }

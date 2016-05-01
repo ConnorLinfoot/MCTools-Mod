@@ -17,7 +17,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -68,8 +67,8 @@ public class Hypixel {
 	}
 
 	@SubscribeEvent
-	public void onChatRecieved(ClientChatReceivedEvent event) {
-		if (!currentlyOnHypixel)
+	public void onChatReceived(ClientChatReceivedEvent event) {
+		if (!currentlyOnHypixel || false) // Currently disabled because of the new network level update :/
 			return;
 
 		// Try and get the chat string to make names clickable
@@ -136,16 +135,6 @@ public class Hypixel {
 	public void runWhereAmICommand() {
 		waitingForWhereAmI = true;
 		FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("/whereami");
-	}
-
-	@SubscribeEvent
-	public void fixHypixelSwordShieldBug(RenderHandEvent event) {
-		if (!currentlyOnHypixel)
-			return;
-		if (Minecraft.getMinecraft().thePlayer != null) {
-			if (Minecraft.getMinecraft().thePlayer.getHeldItemOffhand() != null)
-				event.setCanceled(true);
-		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
