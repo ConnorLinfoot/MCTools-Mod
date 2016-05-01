@@ -37,7 +37,7 @@ public class PlayerRender {
 //			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 //		}
 
-		if( particles.containsKey(entityPlayer.getUniqueID())) {
+		if( particles.containsKey(entityPlayer.getUniqueID()) && !entityPlayer.isInvisible() && !entityPlayer.isSneaking()) {
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
