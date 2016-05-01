@@ -3,6 +3,7 @@ package com.connorlinfoot.mctools.Listeners;
 import com.connorlinfoot.mctools.MCTools;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -37,7 +38,7 @@ public class PlayerRender {
 //			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 //		}
 
-		if( particles.containsKey(entityPlayer.getUniqueID()) && !entityPlayer.isInvisible() && !entityPlayer.isSneaking()) {
+		if( !(Minecraft.getMinecraft().currentScreen instanceof GuiInventory) && particles.containsKey(entityPlayer.getUniqueID()) && !entityPlayer.isInvisible() && !entityPlayer.isSneaking()) {
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
