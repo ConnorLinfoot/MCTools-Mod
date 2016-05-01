@@ -271,7 +271,7 @@ public class Hypixel {
 
 	@SubscribeEvent
 	public void onInteract(EntityInteractEvent event) {
-		if (!currentlyOnHypixel)
+		if (!currentlyOnHypixel || playerInGame)
 			return;
 		if (event.getTarget() instanceof EntityPlayer && event.getEntityPlayer().isSneaking()) {
 			EntityPlayer attacked = (EntityPlayer) event.getTarget();

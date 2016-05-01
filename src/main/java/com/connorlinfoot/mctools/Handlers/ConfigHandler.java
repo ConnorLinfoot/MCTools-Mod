@@ -14,10 +14,9 @@ public class ConfigHandler {
 		config = new Configuration(configFile);
 
 		config.load();
-		isSendData();
+//		isSendData();
 		isDebug();
 		getAPIKey();
-		isSwapHands();
 		isDisplayGui();
 		isDisplayFPS();
 		isDisplayCords();
@@ -46,14 +45,6 @@ public class ConfigHandler {
 
 	public boolean isSendData() {
 		return getSendData().getBoolean();
-	}
-
-	public Property getSwapHands() {
-		return config.get(Configuration.CATEGORY_CLIENT, "Swap Player Hands", false, "");
-	}
-
-	public boolean isSwapHands() {
-		return getSwapHands().getBoolean();
 	}
 
 	public Property getDisplayGui() {
