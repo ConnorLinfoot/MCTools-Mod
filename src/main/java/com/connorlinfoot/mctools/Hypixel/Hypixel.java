@@ -68,7 +68,7 @@ public class Hypixel {
 
 	@SubscribeEvent
 	public void onChatReceived(ClientChatReceivedEvent event) {
-		if (!currentlyOnHypixel || false) // Currently disabled because of the new network level update :/
+		if (!currentlyOnHypixel || true) // Currently disabled because of the new network level update :/
 			return;
 
 		// Try and get the chat string to make names clickable
