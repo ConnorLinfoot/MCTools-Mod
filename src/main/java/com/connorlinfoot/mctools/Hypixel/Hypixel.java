@@ -275,7 +275,6 @@ public class Hypixel {
 			return;
 		if (event.getTarget() instanceof EntityPlayer && event.getEntityPlayer().isSneaking()) {
 			EntityPlayer attacked = (EntityPlayer) event.getTarget();
-//			FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("/party invite " + attacked.getName());
 			GuiHandler.playerClicked = attacked.getUniqueID();
 			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 			entityPlayer.openGui(MCTools.getMcTools(), GuiHandler.HYPIXEL_STATS_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);

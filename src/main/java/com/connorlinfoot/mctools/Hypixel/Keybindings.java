@@ -28,8 +28,12 @@ public class Keybindings {
 		quickJoinTeamNormalSkywars = new KeyBinding("Quick Join - Team Normal Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
 		quickJoinTeamInsaneSkywars = new KeyBinding("Quick Join - Team Insane Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
 		quickJoinMegaSkywars = new KeyBinding("Quick Join - Mega Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
+		ClientRegistry.registerKeyBinding(quickJoinRankedSkywars);
 		ClientRegistry.registerKeyBinding(quickJoinSoloNormalSkywars);
 		ClientRegistry.registerKeyBinding(quickJoinSoloInsaneSkywars);
+		ClientRegistry.registerKeyBinding(quickJoinTeamNormalSkywars);
+		ClientRegistry.registerKeyBinding(quickJoinTeamInsaneSkywars);
+		ClientRegistry.registerKeyBinding(quickJoinMegaSkywars);
 	}
 
 	@SubscribeEvent
