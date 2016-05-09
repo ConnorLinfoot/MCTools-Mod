@@ -13,20 +13,34 @@ import org.lwjgl.input.Keyboard;
 
 public class Keybindings {
 	private Hypixel hypixel;
+	private KeyBinding quickJoinRankedSkywars;
 	private KeyBinding quickJoinSoloNormalSkywars;
 	private KeyBinding quickJoinSoloInsaneSkywars;
+	private KeyBinding quickJoinTeamNormalSkywars;
+	private KeyBinding quickJoinTeamInsaneSkywars;
+	private KeyBinding quickJoinMegaSkywars;
 
 	public Keybindings(Hypixel hypixel) {
 		this.hypixel = hypixel;
+		quickJoinRankedSkywars = new KeyBinding("Quick Join - Ranked Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
 		quickJoinSoloNormalSkywars = new KeyBinding("Quick Join - Solo Normal Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
 		quickJoinSoloInsaneSkywars = new KeyBinding("Quick Join - Solo Insane Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
+		quickJoinTeamNormalSkywars = new KeyBinding("Quick Join - Team Normal Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
+		quickJoinTeamInsaneSkywars = new KeyBinding("Quick Join - Team Insane Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
+		quickJoinMegaSkywars = new KeyBinding("Quick Join - Mega Skywars", Keyboard.KEY_NONE, "MC Tools - Hypixel");
 		ClientRegistry.registerKeyBinding(quickJoinSoloNormalSkywars);
 		ClientRegistry.registerKeyBinding(quickJoinSoloInsaneSkywars);
 	}
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		if (quickJoinSoloNormalSkywars.isPressed()) {
+		if (quickJoinRankedSkywars.isPressed()) {
+			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+			if (hypixel.isCurrentlyOnHypixel())
+				entityPlayer.sendChatMessage("/play ranked_normal");
+			else
+				entityPlayer.addChatMessage(new TextComponentString(MCTools.prefix + TextFormatting.RED + "You are currently not on Hypixel"));
+		} else if (quickJoinSoloNormalSkywars.isPressed()) {
 			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 			if (hypixel.isCurrentlyOnHypixel())
 				entityPlayer.sendChatMessage("/play solo_normal");
@@ -36,6 +50,24 @@ public class Keybindings {
 			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 			if (hypixel.isCurrentlyOnHypixel())
 				entityPlayer.sendChatMessage("/play solo_insane");
+			else
+				entityPlayer.addChatMessage(new TextComponentString(MCTools.prefix + TextFormatting.RED + "You are currently not on Hypixel"));
+		} else if (quickJoinTeamNormalSkywars.isPressed()) {
+			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+			if (hypixel.isCurrentlyOnHypixel())
+				entityPlayer.sendChatMessage("/play teams_normal");
+			else
+				entityPlayer.addChatMessage(new TextComponentString(MCTools.prefix + TextFormatting.RED + "You are currently not on Hypixel"));
+		} else if (quickJoinTeamInsaneSkywars.isPressed()) {
+			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+			if (hypixel.isCurrentlyOnHypixel())
+				entityPlayer.sendChatMessage("/play teams_insane");
+			else
+				entityPlayer.addChatMessage(new TextComponentString(MCTools.prefix + TextFormatting.RED + "You are currently not on Hypixel"));
+		} else if (quickJoinMegaSkywars.isPressed()) {
+			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+			if (hypixel.isCurrentlyOnHypixel())
+				entityPlayer.sendChatMessage("/play mega_normal");
 			else
 				entityPlayer.addChatMessage(new TextComponentString(MCTools.prefix + TextFormatting.RED + "You are currently not on Hypixel"));
 		}
