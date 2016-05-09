@@ -28,8 +28,6 @@ public class PlayerRender {
 	@SubscribeEvent
 	public void render(RenderPlayerEvent.Pre event) {
 		EntityPlayer entityPlayer = event.getEntityPlayer();
-		if (MCTools.getMcTools().getConfigHandler().isSwapHands())
-			event.getEntityPlayer().setPrimaryHand(event.getEntityPlayer().getPrimaryHand().opposite());
 
 //		if (entityPlayer.getUniqueID().toString().equals("ad8fefaa-8351-454b-b739-a4eaa872173f") || entityPlayer.getUniqueID().toString().equals("a6ab3a27-d471-44bb-9ab2-27a284257130")) { // Connor Linfoot ;D
 //			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);

@@ -17,7 +17,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.event.entity.player.EntityInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -68,11 +68,11 @@ public class Hypixel {
 
 	@SubscribeEvent
 	public void onChatReceived(ClientChatReceivedEvent event) {
-		if (!currentlyOnHypixel || true) // Currently disabled because of the new network level update :/
+		if (!currentlyOnHypixel)
 			return;
 
 		// Try and get the chat string to make names clickable
-		if (!playerInGame) {
+		if (!playerInGame && false) {
 			Pattern rankPattern = Pattern.compile("\\[(.*)\\] ([^\\s]+): (.*)"); // Because im bad with regex we will do 2 tests, one with rank and one without
 			Pattern noRankPattern = Pattern.compile("([^\\s]+): (.*)");
 			Matcher rankMatcher = rankPattern.matcher(TextFormatting.getTextWithoutFormattingCodes(event.getMessage().getFormattedText()));
@@ -145,12 +145,12 @@ public class Hypixel {
 		if (event.phase == TickEvent.Phase.START) return;
 		Minecraft mc = Minecraft.getMinecraft();
 		if (!mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null) {
-			// Find if the player is in a lobby or not
 			if (lastServerChecks + 5 * 1000 < System.currentTimeMillis()) {
 				subServer = "";
 				lastServerChecks = System.currentTimeMillis();
 			}
 
+			// Find if the player is in a lobby or not
 			if (subServer.equals("")) {
 				if (waitingForWhereAmI)
 					return;
@@ -270,7 +270,7 @@ public class Hypixel {
 	}
 
 	@SubscribeEvent
-	public void onInteract(EntityInteractEvent event) {
+	public void onInteract(PlayerInteractEvent.EntityInteract event) {
 		if (!currentlyOnHypixel || playerInGame)
 			return;
 		if (event.getTarget() instanceof EntityPlayer && event.getEntityPlayer().isSneaking()) {
