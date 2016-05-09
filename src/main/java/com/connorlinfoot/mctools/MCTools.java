@@ -43,10 +43,10 @@ public class MCTools {
 	private static MCTools mcTools;
 	public static final String prefix = TextFormatting.GRAY + "[" + TextFormatting.GOLD + "MC Tools" + TextFormatting.GRAY + "] " + TextFormatting.RESET;
 	public static final String MODID = "mctools";
-	public static final String VERSION = "0.1";
+	public static final String VERSION = "0.2";
 	private ConfigHandler configHandler;
 	private Hypixel hypixel = new Hypixel();
-	public static KeyBinding quickActions;
+//	public static KeyBinding quickActions;
 	public static ParticleFetchHandler particleFetchHandler;
 
 	public static UUID playerUUID;
@@ -63,8 +63,8 @@ public class MCTools {
 	public void init(FMLInitializationEvent event) {
 		particleFetchHandler = new ParticleFetchHandler();
 		NetworkRegistry.INSTANCE.registerGuiHandler(mcTools, new GuiHandler());
-		quickActions = new KeyBinding("Quick Actions", Keyboard.KEY_X, "MC Tools");
-		ClientRegistry.registerKeyBinding(quickActions);
+//		quickActions = new KeyBinding("Quick Actions", Keyboard.KEY_X, "MC Tools");
+//		ClientRegistry.registerKeyBinding(quickActions);
 
 		// Command test
 		ClientCommandHandler.instance.registerCommand(new MCToolsCommand());
@@ -73,18 +73,18 @@ public class MCTools {
 
 	@SubscribeEvent
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
-		if (quickActions.isPressed()) {
-			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
-			if (entityPlayer.isSneaking() && getConfigHandler().isDebug()) {
-				entityPlayer.openGui(mcTools, GuiHandler.TEXT_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
-			} else {
-				if (!hypixel.isCurrentlyOnHypixel()) {
-					entityPlayer.addChatMessage(new TextComponentString(prefix + TextFormatting.RED + "You are not currently on any supported servers"));
-					return;
-				}
-				entityPlayer.openGui(mcTools, GuiHandler.QUICK_ACTIONS_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
-			}
-		}
+//		if (quickActions.isPressed()) {
+//			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+//			if (entityPlayer.isSneaking() && getConfigHandler().isDebug()) {
+//				entityPlayer.openGui(mcTools, GuiHandler.TEXT_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
+//			} else {
+//				if (!hypixel.isCurrentlyOnHypixel()) {
+//					entityPlayer.addChatMessage(new TextComponentString(prefix + TextFormatting.RED + "You are not currently on any supported servers"));
+//					return;
+//				}
+//				entityPlayer.openGui(mcTools, GuiHandler.QUICK_ACTIONS_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
+//			}
+//		}
 	}
 
 	@EventHandler
