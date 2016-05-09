@@ -1,6 +1,7 @@
 package com.connorlinfoot.mctools.Handlers;
 
 import com.connorlinfoot.mctools.Listeners.PlayerRender;
+import net.minecraft.client.Minecraft;
 import net.minecraft.util.EnumParticleTypes;
 
 import java.io.BufferedReader;
