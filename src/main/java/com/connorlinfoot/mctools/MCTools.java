@@ -9,18 +9,15 @@ import com.connorlinfoot.mctools.Listeners.PlayerRender;
 import net.hypixel.api.HypixelAPI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -34,7 +31,6 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import org.lwjgl.input.Keyboard;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,7 +49,7 @@ public class MCTools {
 	private boolean isPlayerReal = false; // Used to know if the player is actually authenticated via the Mojang API
 	private ConfigHandler configHandler;
 	private Hypixel hypixel = new Hypixel();
-//	public static KeyBinding quickActions;
+	//	public static KeyBinding quickActions;
 	public static ParticleFetchHandler particleFetchHandler;
 
 	public static UUID playerUUID;
@@ -81,6 +77,11 @@ public class MCTools {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		checkIfPlayerIsReal();
+	}
+
+	@SubscribeEvent
+	public void onServerConnect(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+		checkForUpdates();
 	}
 
 	@SubscribeEvent
@@ -155,7 +156,7 @@ public class MCTools {
 	}
 
 	@SubscribeEvent
-	public void onArrowNock(ArrowNockEvent event)  {
+	public void onArrowNock(ArrowNockEvent event) {
 		System.out.println(event.getEntity());
 		System.out.println(event.getEntityLiving());
 		System.out.println(event.getEntityPlayer());
@@ -173,12 +174,12 @@ public class MCTools {
 				particleFetchHandler.addUUID(uuid);
 			}
 
-			for(Entity entity : mc.theWorld.getLoadedEntityList()) {
-				if( entity instanceof EntityArrow ) {
+			for (Entity entity : mc.theWorld.getLoadedEntityList()) {
+				if (entity instanceof EntityArrow) {
 					EntityArrow arrow = (EntityArrow) entity;
-					if( arrow.shootingEntity != null ) {
+					if (arrow.shootingEntity != null) {
 						UUID uuid = arrow.shootingEntity.getUniqueID();
-						if(!PlayerRender.particles.containsKey(uuid))
+						if (!PlayerRender.particles.containsKey(uuid))
 							continue;
 						EnumParticleTypes particle = PlayerRender.particles.get(uuid);
 						Minecraft.getMinecraft().theWorld.spawnParticle(particle, arrow.posX, arrow.posY, arrow.posZ, 0.0D, 0.0D, 0.0D);
@@ -229,6 +230,34 @@ public class MCTools {
 
 	public boolean isPlayerReal() {
 		return isPlayerReal;
+	}
+
+	private void checkForUpdates() {
+		new Thread(new Runnable() {
+			public void run() {
+				HttpURLConnection conn;
+				try {
+					URL url = new URL("https://api.mctools.io/v1/update/" + VERSION + "/?plain=true");
+					conn = (HttpURLConnection) url.openConnection();
+					conn.setDoInput(true);
+					conn.setDoOutput(false);
+					conn.connect();
+					InputStream is = conn.getInputStream();
+					BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+					StringBuilder response = new StringBuilder(); // or StringBuffer if not Java 5+
+					String line;
+					while ((line = rd.readLine()) != null) {
+						response.append(line);
+					}
+					rd.close();
+					if (response.toString().equals("UPDATE")) {
+						Minecraft.getMinecraft().thePlayer.sendChatMessage(TextFormatting.AQUA + "An update for MC Tools has been found, you can download the last version at https://github.com/ConnorLinfoot/MCTools-Mod/releases");
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}).start();
 	}
 
 }

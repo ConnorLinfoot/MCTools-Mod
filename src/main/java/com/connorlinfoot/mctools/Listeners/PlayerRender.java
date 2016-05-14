@@ -29,13 +29,6 @@ public class PlayerRender {
 	public void render(RenderPlayerEvent.Pre event) {
 		EntityPlayer entityPlayer = event.getEntityPlayer();
 
-//		if (entityPlayer.getUniqueID().toString().equals("ad8fefaa-8351-454b-b739-a4eaa872173f") || entityPlayer.getUniqueID().toString().equals("a6ab3a27-d471-44bb-9ab2-27a284257130")) { // Connor Linfoot ;D
-//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
-//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
-//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
-//			Minecraft.getMinecraft().theWorld.spawnParticle(EnumParticleTypes.valueOf(MCToolsCommand.particle.toUpperCase()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
-//		}
-
 		if( !(Minecraft.getMinecraft().currentScreen instanceof GuiInventory) && particles.containsKey(entityPlayer.getUniqueID()) && !entityPlayer.isInvisible() && !entityPlayer.isSneaking()) {
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
 			Minecraft.getMinecraft().theWorld.spawnParticle(particles.get(entityPlayer.getUniqueID()), entityPlayer.posX, entityPlayer.posY + 2, entityPlayer.posZ, 0.0D, 0.0D, 0.0D);
