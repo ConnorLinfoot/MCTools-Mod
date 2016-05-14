@@ -1,6 +1,7 @@
 package com.connorlinfoot.mctools;
 
 import com.connorlinfoot.mctools.Commands.MCToolsCommand;
+import com.connorlinfoot.mctools.HUD.Armor;
 import com.connorlinfoot.mctools.Handlers.ConfigHandler;
 import com.connorlinfoot.mctools.Handlers.GuiHandler;
 import com.connorlinfoot.mctools.Handlers.ParticleFetchHandler;
@@ -49,11 +50,8 @@ public class MCTools {
 	private boolean isPlayerReal = false; // Used to know if the player is actually authenticated via the Mojang API
 	private ConfigHandler configHandler;
 	private Hypixel hypixel = new Hypixel();
-	//	public static KeyBinding quickActions;
 	public static ParticleFetchHandler particleFetchHandler;
-
 	public static UUID playerUUID;
-	String clientUUID;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -104,7 +102,6 @@ public class MCTools {
 	public void init(FMLPostInitializationEvent event) {
 		Minecraft minecraft = FMLClientHandler.instance().getClient();
 		playerUUID = minecraft.getSession().getProfile().getId();
-		clientUUID = playerUUID.toString().replaceAll("-", "");
 		FMLCommonHandler.instance().bus().register(this);
 		MinecraftForge.EVENT_BUS.register(new PlayerRender());
 
@@ -258,6 +255,17 @@ public class MCTools {
 				}
 			}
 		}).start();
+	}
+
+	@SubscribeEvent
+	public void onRenderTick(TickEvent.RenderTickEvent e) {
+		try {
+			if (Minecraft.getMinecraft().inGameHasFocus) {
+				Armor.render();
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }
