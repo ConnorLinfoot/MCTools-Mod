@@ -56,6 +56,7 @@ public class MCTools {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		mcTools = this;
+		FMLCommonHandler.instance().bus().register(new Keybindings(this)); // Register general key bindings
 		configHandler = new ConfigHandler(event.getSuggestedConfigurationFile());
 		FMLCommonHandler.instance().bus().register(hypixel);
 	}
@@ -121,13 +122,6 @@ public class MCTools {
 		}
 	}
 
-	//	@SubscribeEvent
-	public void test(Event event) {
-		String name = event.getClass().getName();
-		if ((name.toLowerCase().contains("chat") || name.toLowerCase().contains("entity") || name.toLowerCase().contains("world") || name.toLowerCase().contains("player")) && !name.toLowerCase().contains("render") && !name.toLowerCase().contains("tick") && !name.toLowerCase().contains("living"))
-			System.out.println(name);
-	}
-
 	public static MCTools getMcTools() {
 		return mcTools;
 	}
@@ -150,13 +144,6 @@ public class MCTools {
 
 	public Hypixel getHypixel() {
 		return hypixel;
-	}
-
-	@SubscribeEvent
-	public void onArrowNock(ArrowNockEvent event) {
-		System.out.println(event.getEntity());
-		System.out.println(event.getEntityLiving());
-		System.out.println(event.getEntityPlayer());
 	}
 
 	@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = false)
@@ -234,7 +221,7 @@ public class MCTools {
 			public void run() {
 				HttpURLConnection conn;
 				try {
-					URL url = new URL("https://api.mctools.io/v1/update/" + VERSION + "/?plain=true");
+					URL url = new URL("http://api.mctools.io/v1/update/" + VERSION + "/?plain=true");
 					conn = (HttpURLConnection) url.openConnection();
 					conn.setDoInput(true);
 					conn.setDoOutput(false);
@@ -257,14 +244,15 @@ public class MCTools {
 		}).start();
 	}
 
-	@SubscribeEvent
+//	@SubscribeEvent
 	public void onRenderTick(TickEvent.RenderTickEvent e) {
-		try {
-			if (Minecraft.getMinecraft().inGameHasFocus) {
+		Minecraft mc = Minecraft.getMinecraft();
+		if (!mc.isGamePaused() && mc.thePlayer != null && mc.theWorld != null) {
+			try {
 				Armor.render();
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 

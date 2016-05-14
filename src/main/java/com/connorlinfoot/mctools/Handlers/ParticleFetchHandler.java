@@ -46,7 +46,7 @@ public class ParticleFetchHandler {
 					running = true;
 					HttpURLConnection conn;
 					try {
-						URL url = new URL("https://api.mctools.io/v1/particle/" + uuid.toString() + "/?plain=true");
+						URL url = new URL("http://api.mctools.io/v1/particle/" + uuid.toString() + "/?plain=true");
 						conn = (HttpURLConnection) url.openConnection();
 						conn.setDoInput(true);
 						conn.setDoOutput(false);

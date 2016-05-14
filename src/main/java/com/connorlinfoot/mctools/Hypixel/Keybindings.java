@@ -1,6 +1,7 @@
 package com.connorlinfoot.mctools.Hypixel;
 
 import com.connorlinfoot.mctools.MCTools;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.text.TextComponentString;
@@ -70,6 +71,8 @@ public class Keybindings {
 				entityPlayer.addChatMessage(new TextComponentString(MCTools.prefix + TextFormatting.RED + "You are currently not on Hypixel"));
 		} else if (quickJoinMegaSkywars.isPressed()) {
 			EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
+			KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindSneak.getKeyCode(), true );
+			if (true) return;
 			if (hypixel.isCurrentlyOnHypixel())
 				entityPlayer.sendChatMessage("/play mega_normal");
 			else
