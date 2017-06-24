@@ -184,12 +184,7 @@ public class Hypixel {
 
                 if (getGameMode() == GameMode.UNKNOWN) {
                     MCTools.getMcTools().outputDebug("We don't know what game you're playing!");
-                }
-
-                MCTools.getMcTools().outputDebug("You are currently playing: " + gameMode.getNiceName());
-
-                if (getGameMode() == GameMode.UNKNOWN) {
-                    MCTools.getMcTools().outputDebug("We don't know what game you're playing!");
+                    return;
                 }
 
                 MCTools.getMcTools().outputDebug("You are currently playing: " + gameMode.getNiceName());

@@ -54,6 +54,9 @@ public class MCToolsCommand extends CommandBase {
         } else if (args.length >= 1 && args[0].equalsIgnoreCase("run")) {
             MCTools.particleFetchHandler.run();
             return;
+        } else if (args.length >= 1 && args[0].equalsIgnoreCase("cache")) {
+            sender.addChatMessage(new ChatComponentText("Player cache size: " + MCTools.getMcTools().getHypixel().getHypixelPlayers().size()));
+            return;
         }
 //        sender.addChatMessage(new ChatComponentText(EnumChatFormatting.AQUA + "Cleared particles"));
         sender.addChatMessage(new ChatComponentText(MCTools.prefix + EnumChatFormatting.RED + "Unknown args"));

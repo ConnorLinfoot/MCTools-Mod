@@ -8,7 +8,7 @@ public enum GameMode {
     THE_WALLS,
     MEGA_WALLS,
     UHC_CHAMPIONS,
-    BEDWARS,
+//    BEDWARS,
     UNKNOWN;
 
     public String getNiceName() {
@@ -27,8 +27,8 @@ public enum GameMode {
                 return "Mega Walls";
             case UHC_CHAMPIONS:
                 return "UHC Champions";
-            case BEDWARS:
-                return "BedWars";
+//            case BEDWARS:
+//                return "BedWars";
             case UNKNOWN:
                 return "Unknown";
         }
