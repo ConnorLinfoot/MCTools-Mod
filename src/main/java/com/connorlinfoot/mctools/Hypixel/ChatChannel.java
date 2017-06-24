@@ -7,10 +7,9 @@ public enum ChatChannel {
     PARTY,
     GUILD;
 
-    public ChatChannel switchTo() {
+    public void switchTo() {
         String channel = this.toString().toLowerCase();
         FMLClientHandler.instance().getClient().thePlayer.sendChatMessage("/chat " + channel);
-        return this;
     }
 
     public static ChatChannel fromChar(String c) {

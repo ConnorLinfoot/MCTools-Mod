@@ -114,47 +114,6 @@ public class Hypixel {
             }
         }
 
-        // Try and get the chat string to make names clickable
-        if (!playerInGame && false) {
-            Pattern rankPattern = Pattern.compile("\\[(.*)\\] ([^\\s]+): (.*)"); // Because im bad with regex we will do 2 tests, one with rank and one without
-            Pattern noRankPattern = Pattern.compile("([^\\s]+): (.*)");
-            Matcher rankMatcher = rankPattern.matcher(EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getFormattedText()));
-            Matcher noRankMatcher = noRankPattern.matcher(EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getFormattedText()));
-            String rank = null;
-            String username = null;
-            String chatMessage = null;
-            if (rankMatcher.matches()) {
-                rank = rankMatcher.group(1);
-                username = rankMatcher.group(2);
-                chatMessage = rankMatcher.group(3);
-            } else if (noRankMatcher.matches()) {
-                username = rankMatcher.group(1);
-                chatMessage = rankMatcher.group(2);
-            }
-
-            if (username != null && chatMessage != null) {
-                // Let's develop our own chat message! :D
-                ChatComponentText finalComponent = new ChatComponentText("");
-                PlayerRank playerRank = PlayerRank.DEFAULT;
-                if (rank != null) {
-                    playerRank = PlayerRank.fromNiceName(rank);
-                    ChatComponentText rankComponent = new ChatComponentText(playerRank.getPrefix(true));
-                    finalComponent.appendSibling(rankComponent);
-                }
-
-                ChatComponentText usernameComponent = new ChatComponentText(playerRank.getColor() + username);
-                EntityPlayer theChatPlayer = Minecraft.getMinecraft().theWorld.getPlayerEntityByName(username);
-                UUID uuid = theChatPlayer.getUniqueID(); // Our playerUUID for now!
-//                usernameComponent.setChatStyle(new Style().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "mctools hypixel stats " + uuid)));
-                finalComponent.appendSibling(usernameComponent).appendText(": ");
-
-                ChatComponentText messageComponent = new ChatComponentText(chatMessage);
-                finalComponent.appendSibling(messageComponent);
-
-                event.message = finalComponent;
-            }
-        }
-
         if (!waitingForWhereAmI)
             return; // We don't care if the player ran the command or something
 
