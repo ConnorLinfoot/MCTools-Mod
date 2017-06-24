@@ -134,12 +134,6 @@ public class MCTools {
         System.out.println("[MC TOOLS] [DEBUG] " + message);
     }
 
-    //	@SubscribeEvent
-    public void onServerJoin(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
-        entityPlayer.openGui(mcTools, GuiHandler.HYPIXEL_STATS_GUI, entityPlayer.getEntityWorld(), 0, 0, 0);
-    }
-
     public Hypixel getHypixel() {
         return hypixel;
     }
@@ -233,8 +227,7 @@ public class MCTools {
                     }
                     rd.close();
                     if (response.toString().equals("UPDATE")) {
-//                        Minecraft.getMinecraft().thePlayer.sendChatMessage(TextFormatting.AQUA + "An update for MC Tools has been found, you can download the last version at https://github.com/ConnorLinfoot/MCTools-Mod/releases");
-                        Minecraft.getMinecraft().thePlayer.sendChatMessage("An update for MC Tools has been found, you can download the last version at https://github.com/ConnorLinfoot/MCTools-Mod/releases");
+                        Minecraft.getMinecraft().thePlayer.sendChatMessage(EnumChatFormatting.AQUA + "An update for MC Tools has been found, you can download the last version at https://github.com/ConnorLinfoot/MCTools-Mod/releases");
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
