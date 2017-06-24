@@ -8,14 +8,14 @@ import net.minecraftforge.fml.client.config.GuiConfig;
 
 public class MCToolsConfig extends GuiConfig {
 
-	public MCToolsConfig(GuiScreen parentScreen) {
-		super(parentScreen, new ConfigElement(MCTools.getMcTools().getConfigHandler().getConfig().getCategory(Configuration.CATEGORY_CLIENT)).getChildElements(), MCTools.MODID, false, false, "MC Tools Configuration", "");
-	}
+    public MCToolsConfig(GuiScreen parentScreen) {
+        super(parentScreen, new ConfigElement(MCTools.getMcTools().getConfigHandler().getConfig().getCategory(Configuration.CATEGORY_CLIENT)).getChildElements(), MCTools.MODID, false, false, "MC Tools Configuration", "");
+    }
 
-	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		MCTools.getMcTools().getConfigHandler().getConfig().save();
-	}
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        MCTools.getMcTools().getConfigHandler().getConfig().save();
+    }
 
 }
